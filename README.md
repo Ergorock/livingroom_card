@@ -63,6 +63,7 @@ Chaque règle : `image`, `filter` CSS optionnel, `match: all | any`, `disabled`.
 | `header.weather`, `header.mode`, `header.show_temperature` | Puces de l'en-tête (le mode maison s'ouvre en menu) |
 | `layout.mode` | `tabs` ou `stacked` |
 | `layout.hero`, `layout.hero_style`, `layout.aspect_ratio` | Image d'ambiance, style `banner`/`ambient`, format (`3/2` par défaut) |
+| `layout.wide`, `wide_breakpoint`, `wide_split` | Disposition large `auto`/`never` : image à gauche et commandes à droite dès que la carte dépasse `wide_breakpoint` px (700), l'image occupant `wide_split` % (55) |
 | `layout.default_tab`, `remember_tab`, `auto_media_tab` | Gestion des onglets |
 | `layout.show_summary`, `show_scenes`, `show_all_off`, `hide_unavailable`, `accent_color` | Affichage |
 | `behavior.light_tap`, `hold`, `haptics`, `confirm_all_off`, `all_off.{lights,devices,media,covers}` | Interactions |

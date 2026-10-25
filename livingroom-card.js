@@ -24,6 +24,9 @@ const DEFAULT_CONFIG = {
     mode: "tabs",            // tabs | stacked
     hero: true,
     hero_style: "banner",    // banner | ambient
+    wide: "auto",            // auto | never
+    wide_breakpoint: 700,    // largeur (px) de la carte à partir de laquelle on passe en 2 colonnes
+    wide_split: 55,          // part de l'image (%) en disposition large
     aspect_ratio: "3/2",
     default_tab: "auto",
     remember_tab: true,
@@ -492,7 +495,7 @@ function renderIllustration(ctx, cfg) {
 /* ------------------------------------------------------------------ */
 
 const CARD_STYLES = `
-:host { display: block; --lrc-radius: var(--ha-card-border-radius, 24px); --lrc-accent: var(--lrc-accent-color, var(--accent-color, #ff9800));
+:host { display: block; container: lrc / inline-size; --lrc-radius: var(--ha-card-border-radius, 24px); --lrc-accent: var(--lrc-accent-color, var(--accent-color, #ff9800));
   --lrc-light: #ffb74d; --lrc-cover: #5c9dff; --lrc-media: #9b6bff; --lrc-device: #3ecf8e; --lrc-climate: #ff7a59;
   --lrc-tile: color-mix(in srgb, var(--primary-text-color) 6%, transparent);
   --lrc-tile-hover: color-mix(in srgb, var(--primary-text-color) 10%, transparent);
@@ -662,7 +665,7 @@ button { font: inherit; color: inherit; }
 .toast { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%) translateY(20px); background: var(--primary-text-color); color: var(--card-background-color, #fff); padding: 8px 14px; border-radius: 12px; font-size: .84rem; font-weight: 600; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; z-index: 20; max-width: 90%; text-align: center; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .warn { padding: 12px 14px; color: var(--error-color, #e53935); font-size: .88rem; }
-@media (max-width: 420px) { .tab .tl { display: none; } .tab { padding: 10px 4px; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .covers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container lrc (max-width: 420px) { .tab .tl { display: none; } .tab { padding: 10px 4px; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .covers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 `;
 
@@ -748,10 +751,21 @@ class LivingroomCard extends HTMLElement {
     this._wasPlaying = computeContext(hass, cfg).playing;
 
     const accent = L.accent_color ? `--lrc-accent-color:${esc(L.accent_color)};` : "";
+    // Disposition large : image à gauche, commandes à droite, dès que la carte dépasse le seuil
+    const bp = clamp(Number(L.wide_breakpoint) || 700, 400, 3000);
+    const split = clamp(Number(L.wide_split) || 55, 30, 75);
+    const wideCss = L.hero && L.wide !== "never" ? `
+      @container lrc (min-width: ${bp}px) {
+        .layout { display: grid; grid-template-columns: minmax(0, ${split}fr) minmax(0, ${100 - split}fr); align-items: start; }
+        .col-a { padding-bottom: 14px; }
+        .col-b { padding-top: 4px; }
+        .col-b .tabs { margin-top: 14px; }
+      }` : "";
     this.shadowRoot.innerHTML = `
-      <style>${CARD_STYLES}</style>
+      <style>${CARD_STYLES}${wideCss}</style>
       <ha-card class="style-${esc(L.hero_style)} mode-${esc(L.mode)} ${L.mode === "stacked" ? "stacked" : ""}" style="${accent}">
         ${L.hero_style === "ambient" ? `<div class="ambient"></div>` : ""}
+        <div class="layout"><div class="col-a">
         ${L.hero ? `
         <div class="hero" style="aspect-ratio:${esc(L.aspect_ratio || "3/2")};--lrc-fade:${Number(cfg.images.transition) || 0}ms">
           <div class="illus"></div>
@@ -765,8 +779,10 @@ class LivingroomCard extends HTMLElement {
           <div class="hero-bottom"><div class="summary"></div></div>
         </div>` : `<div class="hero-top flat"></div>`}
         ${L.show_scenes ? `<div class="scenes"></div>` : ""}
+        </div><div class="col-b">
         ${L.mode === "tabs" && tabs.length > 1 ? `<div class="tabs"></div>` : ""}
         <div class="panels"></div>
+        </div></div>
         <div class="toast"></div>
       </ha-card>`;
     if (!L.hero) {
@@ -1730,7 +1746,8 @@ const LABELS = {
   confirm_off: "Confirmer avant d'éteindre", confirm: "Demander confirmation", temperature: "Capteur de température", humidity: "Capteur d'humidité",
   climate: "Thermostat (climate)", comfort_min: "Confort min (°C)", comfort_max: "Confort max (°C)", graph: "Afficher le graphique",
   hours: "Historique (heures)", mode_layout: "Disposition", hero: "Afficher l'image d'ambiance", hero_style: "Style",
-  aspect_ratio: "Format de l'image", default_tab: "Onglet par défaut", remember_tab: "Mémoriser le dernier onglet",
+  aspect_ratio: "Format de l'image", wide: "Disposition en paysage / grand écran",
+  wide_breakpoint: "Largeur de carte à partir de laquelle passer en 2 colonnes", wide_split: "Part de l'image en 2 colonnes", default_tab: "Onglet par défaut", remember_tab: "Mémoriser le dernier onglet",
   auto_media_tab: "Basculer sur Média quand la lecture démarre", show_summary: "Résumé sur l'image", show_scenes: "Barre de scènes",
   show_all_off: "Bouton « Tout éteindre »", hide_unavailable: "Masquer les entités indisponibles", accent_color: "Couleur d'accent (CSS)",
   light_tap: "Toucher une lampe", hold: "Appui long", haptics: "Retour haptique (app mobile)", confirm_all_off: "Confirmer « Tout éteindre »",
@@ -2296,6 +2313,9 @@ class LivingroomCardEditor extends HTMLElement {
       { name: "mode", label: "Organisation", selector: { select: { mode: "list", options: [{ value: "tabs", label: "Onglets (compact)" }, { value: "stacked", label: "Tout afficher (sections empilées)" }] } } },
       { name: "hero", selector: { boolean: {} } },
       { name: "hero_style", selector: { select: { mode: "list", options: [{ value: "banner", label: "Bannière" }, { value: "ambient", label: "Ambiante (l'image floutée colore toute la carte)" }] } } },
+      { name: "wide", selector: { select: { mode: "list", options: [{ value: "auto", label: "Automatique : image à gauche, commandes à droite quand la carte est assez large" }, { value: "never", label: "Toujours empilé (image au-dessus)" }] } } },
+      { name: "wide_breakpoint", selector: { number: { min: 400, max: 1600, step: 20, mode: "slider", unit_of_measurement: "px" } } },
+      { name: "wide_split", selector: { number: { min: 30, max: 75, step: 5, mode: "slider", unit_of_measurement: "%" } } },
       { name: "aspect_ratio", selector: { select: { mode: "dropdown", custom_value: true, options: [{ value: "3/2", label: "3:2 (images ChatGPT 1536×1024)" }, { value: "16/9", label: "16:9" }, { value: "2/1", label: "2:1 (panoramique)" }, { value: "4/3", label: "4:3" }, { value: "1/1", label: "1:1" }] } } },
       { name: "default_tab", selector: { select: { mode: "dropdown", options: [{ value: "auto", label: "Automatique" }, ...TABS.map((t) => ({ value: t.id, label: t.label }))] } } },
       { name: "remember_tab", selector: { boolean: {} } },
