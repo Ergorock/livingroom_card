@@ -1,0 +1,161 @@
+# Configuration prête à l'emploi pour le salon (entités de votre Home Assistant).
+# Tout est modifiable ensuite depuis l'éditeur visuel.
+type: custom:livingroom-card
+name: Salon
+icon: mdi:sofa
+header:
+  weather: weather.saint_remy_les_chevreuse
+  mode: input_select.mode_maison
+  show_temperature: true
+layout:
+  mode: tabs
+  hero_style: ambient
+  aspect_ratio: 3/2
+  auto_media_tab: true
+images:
+  default: /local/salon/salon_jour.jpg
+  transition: 900
+  rules:
+    - name: Cinéma (TV la nuit)
+      image: /local/salon/salon_tv_nuit.jpg
+      match: all
+      conditions:
+        - condition: tv_on
+        - condition: night
+    - name: TV en journée
+      image: /local/salon/salon_tv_jour.jpg
+      match: all
+      conditions:
+        - condition: tv_on
+    - name: Soirée lumières
+      image: /local/salon/salon_nuit_lumieres.jpg
+      match: all
+      conditions:
+        - condition: night
+        - condition: lights_on
+    - name: Nuit
+      image: /local/salon/salon_nuit.jpg
+      match: all
+      conditions:
+        - condition: night
+    - name: Volets fermés
+      image: /local/salon/salon_volets_fermes.jpg
+      match: all
+      conditions:
+        - condition: covers_closed
+          value: 20
+    - name: Musique
+      image: /local/salon/salon_musique.jpg
+      match: all
+      conditions:
+        - condition: media_playing
+    - name: Absent
+      image: /local/salon/salon_jour.jpg
+      filter: grayscale(0.7) brightness(0.8)
+      match: all
+      conditions:
+        - condition: mode
+          value: Absent
+# Positions indicatives : à ajuster dans l'éditeur (onglet Points, clic sur l'image).
+hotspots:
+  - entity: light.lampe_salon
+    icon: mdi:floor-lamp
+    x: 25
+    y: 38
+  - entity: switch.lampe_bibliotheque
+    icon: mdi:bookshelf
+    x: 9
+    y: 26
+  - entity: media_player.50pus8546_12_35
+    icon: mdi:television
+    tap_action: more-info
+    x: 85
+    y: 57
+  - entity: media_player.salon
+    icon: mdi:soundbar
+    tap_action: more-info
+    x: 76
+    y: 72
+lights:
+  - entity: light.lampe_salon
+    name: Lampadaire
+    icon: mdi:floor-lamp
+  - entity: switch.lampe_bibliotheque
+    name: Bibliothèque
+    icon: mdi:bookshelf
+covers:
+  - entity: cover.salon_jardin
+    name: Jardin
+    my_button: button.salon_jardin_my_position
+  - entity: cover.salon_rue
+    name: Rue
+    my_button: button.salon_rue_my_position
+  - entity: cover.bow_window_gauche
+    name: Bow gauche
+    my_button: button.bow_window_gauche_my_position
+  - entity: cover.bow_window_centre
+    name: Bow centre
+    my_button: button.bow_window_centre_my_position
+  - entity: cover.bow_window_droite
+    name: Bow droite
+    my_button: button.bow_window_droite_my_position
+media:
+  player: media_player.salon
+  tv: media_player.50pus8546_12_35
+  tv_name: TV Philips
+  tv_power: switch.smart_switch_1911296320772790805648e1e91226ec_outlet_1
+  ambilight: light.50pus8546_12_ambilight
+  show_sources: true
+  sound_controls:
+    - switch.unnamed_room_son_mode_nuit
+    - switch.unnamed_room_amelioration_des_dialogues
+    - switch.salon_caisson_de_basses_active_2
+    - switch.unnamed_room_loudness_4
+devices:
+  - entity: switch.smart_switch_1911296320772790805648e1e91226ec_outlet_1
+    name: TV
+    icon: mdi:television
+  - entity: switch.smart_switch_1911296320772790805648e1e91226ec_outlet_3
+    name: PS5
+    icon: mdi:sony-playstation
+    confirm_off: true
+  - entity: switch.smart_switch_1911296320772790805648e1e91226ec_outlet_2
+    name: Switch
+    icon: mdi:nintendo-switch
+    confirm_off: true
+  - entity: switch.smart_switch_1911296320772790805648e1e91226ec_outlet_4
+    name: Prise 4
+    icon: mdi:power-socket-eu
+scenes:
+  - entity: scene.allumer_salon
+    name: Allumer
+    icon: mdi:sofa
+  - entity: scene.monter_rdc
+    name: Ouvrir RDC
+    icon: mdi:arrow-up-bold-box-outline
+  - entity: scene.baisser_rdc
+    name: Fermer RDC
+    icon: mdi:arrow-down-bold-box-outline
+  - entity: scene.my_rdc
+    name: My RDC
+    icon: mdi:star-outline
+  - entity: scene.nuit
+    name: Nuit
+    icon: mdi:weather-night
+    color: "#7f5cff"
+climate:
+  temperature: sensor.sonoff_snzb_02d_temperature_2
+  humidity: sensor.sonoff_snzb_02d_humidite_2
+  comfort_min: 19
+  comfort_max: 22
+  graph: true
+  hours: 24
+behavior:
+  hold: more-info
+  haptics: true
+  confirm_all_off: true
+  all_off:
+    lights: true
+    devices: false
+    media: true
+    covers: false

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Livingroom Card — banc de test</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+<style>
+  :root { --primary-text-color: #1c1c1e; --secondary-text-color: #6b6b70; --card-background-color: #fff; --ha-card-background: #fff;
+    --divider-color: rgba(0,0,0,.12); --primary-color: #03a9f4; --accent-color: #ff9800; --error-color: #e53935; --success-color: #43a047; --text-primary-color: #fff; }
+  body.dark { --primary-text-color: #e8e8ea; --secondary-text-color: #9a9aa2; --card-background-color: #1c1c1f; --ha-card-background: #1c1c1f; --divider-color: rgba(255,255,255,.12); }
+  body { margin: 0; font-family: Roboto, system-ui, sans-serif; background: #eef0f3; color: var(--primary-text-color); }
+  body.dark { background: #111214; }
+  .wrap { display: flex; gap: 20px; padding: 16px; flex-wrap: wrap; align-items: flex-start; }
+  .col { width: 460px; max-width: 100%; }
+  .ed { flex: 1; min-width: 320px; background: var(--card-background-color); border-radius: 16px; padding: 14px; }
+  .bar { display: flex; gap: 8px; padding: 12px 16px 0; flex-wrap: wrap; }
+  .bar button { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color); cursor: pointer; }
+  ha-card { display: block; background: var(--ha-card-background); border-radius: 24px; box-shadow: 0 2px 10px rgba(0,0,0,.08); color: var(--primary-text-color); }
+  pre { font-size: 11px; white-space: pre-wrap; max-height: 260px; overflow: auto; background: #0001; padding: 8px; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div class="bar">
+  <button onclick="document.body.classList.toggle('dark')">Thème clair/sombre</button>
+  <button onclick="sim('night')">Nuit / jour</button>
+  <button onclick="sim('tv')">TV on/off</button>
+  <button onclick="sim('play')">Lecture Sonos</button>
+  <button onclick="sim('lamp')">Lampe on/off</button>
+  <button onclick="sim('covers')">Volets 0/100</button>
+  <button onclick="sim('images')">Avec/sans images</button>
+  <button onclick="sim('stacked')">Onglets/empilé</button>
+</div>
+<div class="wrap">
+  <div class="col" id="cardcol"></div>
+  <div class="ed"><div id="editor"></div><pre id="yaml"></pre></div>
+</div>
+<script src="./stubs.js"></script>
+<script src="./mock-hass.js"></script>
+<script type="module">
+  await import("../livingroom-card.js");
+  const card = document.createElement("livingroom-card");
+  window.card = card;
+  window.config = window.EXAMPLE_CONFIG;
+  card.setConfig(window.config);
+  card.hass = window.hass;
+  document.getElementById("cardcol").appendChild(card);
+  const ed = document.createElement("livingroom-card-editor");
+  ed.setConfig(window.config);
+  ed.hass = window.hass;
+  ed.addEventListener("config-changed", (e) => {
+    window.config = e.detail.config;
+    card.setConfig(window.config);
+    card.hass = window.hass;
+    ed.setConfig(window.config);
+    document.getElementById("yaml").textContent = JSON.stringify(window.config, null, 2);
+  });
+  document.getElementById("editor").appendChild(ed);
+  window.editor = ed;
+  window.onHassChange = (h) => { card.hass = h; ed.hass = h; };
+  document.addEventListener("hass-more-info", (e) => console.log("more-info", e.detail.entityId));
+  window.addEventListener("hass-more-info", (e) => console.log("more-info", e.detail.entityId));
+</script>
+</body>
+</html>
