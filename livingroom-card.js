@@ -602,8 +602,8 @@ button { font: inherit; color: inherit; }
 .covers { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 .cover { padding: 10px; border-radius: 18px; background: var(--lrc-tile); display: flex; flex-direction: column; gap: 8px; }
 .cover .ch { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
-.cover .ch .nm { font-weight: 600; font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cover .ch .pv { font-size: .8rem; color: var(--lrc-muted); font-variant-numeric: tabular-nums; }
+.cover .ch .nm { min-width: 0; font-weight: 600; font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cover .ch .pv { flex: 0 0 auto; white-space: nowrap; font-size: .8rem; color: var(--lrc-muted); font-variant-numeric: tabular-nums; }
 .win { position: relative; height: 96px; border-radius: 12px; overflow: hidden; background: linear-gradient(180deg, var(--sky1), var(--sky2)); border: 3px solid color-mix(in srgb, var(--primary-text-color) 18%, transparent); cursor: ns-resize; touch-action: none; }
 .win.noset { cursor: default; touch-action: pan-y; }
 .win .sl { position: absolute; left: 0; right: 0; top: 0; height: calc(100% - var(--val, 100) * 1%); background: repeating-linear-gradient(180deg, color-mix(in srgb, var(--primary-text-color) 55%, #888) 0 6px, color-mix(in srgb, var(--primary-text-color) 40%, #666) 6px 7.5px); transition: height .5s ease; box-shadow: 0 2px 6px rgba(0,0,0,.25); }
@@ -611,8 +611,8 @@ button { font: inherit; color: inherit; }
 .win .bar { position: absolute; left: 0; right: 0; top: calc(100% - var(--val, 100) * 1%); height: 4px; margin-top: -2px; background: var(--lrc-cover); opacity: 0; transition: opacity .2s; }
 .win:hover .bar, .win.dragging .bar { opacity: 1; }
 .win .unk { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: .78rem; font-weight: 600; text-shadow: 0 1px 2px #000; background: repeating-linear-gradient(135deg, rgba(0,0,0,.08) 0 8px, transparent 8px 16px); }
-.cover .btns { justify-content: space-between; }
-.cover .btns .btn { flex: 1; min-width: 0; }
+.cover .btns { flex-wrap: nowrap; gap: 4px; justify-content: space-between; }
+.cover .btns .btn { flex: 1 1 0; min-width: 0; padding: 0; }
 .allbar { display: flex; gap: 6px; align-items: center; }
 
 /* Média */
@@ -1175,7 +1175,7 @@ class LivingroomCard extends HTMLElement {
       const canSet = s && ((s.attributes.supported_features || 0) & 4) === 4 && hasPos;
       const pos = hasPos ? Number(s.attributes.current_position) : s && s.state === "open" ? 100 : s && s.state === "closed" ? 0 : null;
       const moving = s && (s.state === "opening" || s.state === "closing");
-      const label = unav ? "Indisponible" : moving ? (s.state === "opening" ? "Ouverture…" : "Fermeture…") : pos === null ? "État inconnu" : pos >= 100 ? "Ouvert" : pos <= 0 ? "Fermé" : `${pos} %`;
+      const label = unav ? "Indisponible" : moving ? (s.state === "opening" ? "Ouverture…" : "Fermeture…") : pos === null ? "Inconnu" : pos >= 100 ? "Ouvert" : pos <= 0 ? "Fermé" : `${pos} %`;
       return `<div class="cover ${unav ? "unavail" : ""}">
         <div class="ch"><span class="nm">${esc(name)}</span><span class="pv" data-val>${label}</span></div>
         <div class="win ${canSet ? "" : "noset"}" style="--sky1:${s1};--sky2:${s2};--val:${pos === null ? 50 : pos}"
