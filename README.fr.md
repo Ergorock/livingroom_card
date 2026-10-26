@@ -21,6 +21,16 @@ Carte Lovelace personnalisée, sans dépendance, avec éditeur visuel complet.
 
 L'interface est disponible en français et en anglais (elle suit la langue de Home Assistant).
 
+## Captures d'écran
+
+![Carte du salon](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/card.png)
+
+![Éditeur visuel : général](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-general.png)
+
+![Éditeur visuel : points interactifs](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-hotspots.png)
+
+![Éditeur visuel : disposition](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-layout.png)
+
 ## Installation
 
 ### HACS (dépôt personnalisé)

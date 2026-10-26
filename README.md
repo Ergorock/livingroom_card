@@ -20,6 +20,16 @@ Custom Lovelace card, with no dependencies and a full visual editor.
   light/dark theme, “ambient” style (the blurred image tints the whole card).
 - Interface in English and French (follows the Home Assistant language).
 
+## Screenshots
+
+![Living room card](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/card.png)
+
+![Visual editor: general](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-general.png)
+
+![Visual editor: hotspots](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-hotspots.png)
+
+![Visual editor: layout](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-layout.png)
+
 ## Installation
 
 ### HACS (custom repository)
