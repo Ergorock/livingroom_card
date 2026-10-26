@@ -19,11 +19,15 @@ Carte Lovelace personnalisée, sans dépendance, avec éditeur visuel complet.
 
 ## Installation
 
-1. Copiez `livingroom-card.js` dans `config/www/` de Home Assistant (avec l'app *File editor* ou *Samba*).
-2. **Paramètres → Tableaux de bord → ⋮ → Ressources → Ajouter** :
-   - URL : `/local/livingroom-card.js?v=1.0.0`
-   - Type : *Module JavaScript*
-3. Rechargez la page (Ctrl+F5), éditez un tableau de bord → **Ajouter une carte** → « Salon — carte tout-en-un ».
+### HACS (dépôt personnalisé)
+
+1. HACS → menu ⋮ → *Dépôts personnalisés* → ajoutez `https://github.com/Ergorock/livingroom_card`, catégorie **Dashboard**.
+2. Installez **Livingroom Card**, puis rechargez le navigateur.
+
+### Manuelle
+
+1. Copiez `livingroom-card.js` dans `config/www/livingroom-card.js`.
+2. *Paramètres → Tableaux de bord → ⋮ → Ressources* : ajoutez `/local/livingroom-card.js?v=1.0.0` (type *Module JavaScript*).
 
 > À chaque mise à jour du fichier, incrémentez `?v=` dans l'URL de la ressource : `/local/` est mis en cache 31 jours.
 

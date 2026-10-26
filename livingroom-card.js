@@ -2349,16 +2349,18 @@ class LivingroomCardEditor extends HTMLElement {
   }
 }
 
-customElements.define(CARD_TAG, LivingroomCard);
-customElements.define(EDITOR_TAG, LivingroomCardEditor);
+if (!customElements.get(CARD_TAG)) customElements.define(CARD_TAG, LivingroomCard);
+if (!customElements.get(EDITOR_TAG)) customElements.define(EDITOR_TAG, LivingroomCardEditor);
 
 window.customCards = window.customCards || [];
-window.customCards.push({
-  type: CARD_TAG,
-  name: "Salon — carte tout-en-un",
-  description: "Ambiance visuelle dynamique, points interactifs, lumières, volets, média, appareils, scènes et climat dans une seule carte.",
-  preview: true,
-  documentationURL: "https://github.com/Ergorock/livingroom_card",
-});
+if (!window.customCards.some((c) => c.type === CARD_TAG)) {
+  window.customCards.push({
+    type: CARD_TAG,
+    name: "Salon — carte tout-en-un",
+    description: "Ambiance visuelle dynamique, points interactifs, lumières, volets, média, appareils, scènes et climat dans une seule carte.",
+    preview: true,
+    documentationURL: "https://github.com/Ergorock/livingroom_card",
+  });
+}
 
 console.info(`%c LIVINGROOM-CARD %c v${CARD_VERSION} `, "background:#ff9800;color:#fff;font-weight:700;border-radius:4px 0 0 4px;padding:2px 4px", "background:#333;color:#fff;border-radius:0 4px 4px 0;padding:2px 4px");
