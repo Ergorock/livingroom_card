@@ -28,6 +28,8 @@ Custom Lovelace card, with no dependencies and a full visual editor.
 
 ![Visual editor: hotspots](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-hotspots.png)
 
+![Visual editor: ambience rule](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-rule.png)
+
 ![Visual editor: layout](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-layout.png)
 
 ## Installation

@@ -29,6 +29,8 @@ L'interface est disponible en français et en anglais (elle suit la langue de Ho
 
 ![Éditeur visuel : points interactifs](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-hotspots.png)
 
+![Éditeur visuel : règle d'ambiance](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-rule.png)
+
 ![Éditeur visuel : disposition](https://raw.githubusercontent.com/Ergorock/livingroom_card/main/images/editor-layout.png)
 
 ## Installation
