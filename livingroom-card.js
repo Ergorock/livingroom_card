@@ -15,8 +15,274 @@ const EDITOR_TAG = "livingroom-card-editor";
 /* Valeurs par défaut                                                  */
 /* ------------------------------------------------------------------ */
 
+// Traductions : le texte français sert de clé, la version anglaise est utilisée hors français
+const EN = {
+  "Salon": "Living room",
+  "Configuration invalide": "Invalid configuration",
+  "Salon — carte tout-en-un": "Living room — all-in-one card",
+  "Ambiance visuelle dynamique, points interactifs, lumières, volets, média, appareils, scènes et climat dans une seule carte.": "Dynamic ambient image, interactive hotspots, lights, covers, media, devices, scenes and climate in a single card.",
+  "Lumières": "Lights",
+  "Volets": "Covers",
+  "Média": "Media",
+  "Appareils": "Devices",
+  "Climat": "Climate",
+  "État d'une entité": "Entity state",
+  "Il fait nuit (soleil couché)": "It is night (sun has set)",
+  "Il fait jour": "It is day",
+  "Au moins une lumière allumée": "At least one light on",
+  "Toutes les lumières éteintes": "All lights off",
+  "TV allumée": "TV on",
+  "Musique / média en lecture": "Music / media playing",
+  "Volets fermés (moyenne ≤ seuil %)": "Covers closed (average ≤ threshold %)",
+  "Volets ouverts (moyenne ≥ seuil %)": "Covers open (average ≥ threshold %)",
+  "Mode maison = valeur": "House mode = value",
+  "est égal à": "is equal to",
+  "est différent de": "is not equal to",
+  "est actif (on / ouvert / lecture…)": "is active (on / open / playing…)",
+  "est inactif": "is inactive",
+  "est supérieur à": "is above",
+  "est inférieur à": "is below",
+  "Règle {n}": "Rule {n}",
+  "Image par défaut": "Default image",
+  "Cinéma (TV la nuit)": "Cinema (TV at night)",
+  "TV en journée": "TV during the day",
+  "Soirée lumières": "Evening lights",
+  "Nuit": "Night",
+  "Volets fermés": "Covers closed",
+  "Musique": "Music",
+  "Absent": "Away",
+  "Aucune entité configurée. Ouvrez l'éditeur visuel pour choisir une pièce ou ajouter des entités.": "No entities configured. Open the visual editor to choose a room or add entities.",
+  "{n} allumée": "{n} on",
+  "{n} allumées": "{n} on",
+  "{n} appareil": "{n} device",
+  "{n} appareils": "{n} devices",
+  "Lumières éteintes": "Lights off",
+  "Volets ouverts": "Covers open",
+  "Volets à {n} %": "Covers at {n} %",
+  "Lecture": "Playing",
+  "Toucher encore pour tout éteindre": "Tap again to turn everything off",
+  "Tout éteindre": "All off",
+  "Tout allumer": "All on",
+  "Confirmer « {name} » ?": "Confirm “{name}”?",
+  "Indisponible": "Unavailable",
+  "Allumée": "On",
+  "Éteinte": "Off",
+  "Allumé": "On",
+  "Éteint": "Off",
+  "Astuce : glissez horizontalement sur une lampe pour régler la luminosité, appui long pour plus d'options.": "Tip: swipe horizontally on a lamp to set its brightness, long-press for more options.",
+  "Tout ouvrir": "Open all",
+  "Tout arrêter": "Stop all",
+  "Tout fermer": "Close all",
+  "Position favorite (My)": "Favorite position (My)",
+  "Ouverture…": "Opening…",
+  "Fermeture…": "Closing…",
+  "Inconnu": "Unknown",
+  "Ouvert": "Open",
+  "Fermé": "Closed",
+  "Position non remontée": "Position not reported",
+  "Ouvrir": "Open",
+  "Stop": "Stop",
+  "Fermer": "Close",
+  "Astuce : faites glisser verticalement dans la fenêtre pour régler précisément la position.": "Tip: drag vertically in the window to set the exact position.",
+  "Rien en lecture": "Nothing playing",
+  "indisponible": "unavailable",
+  "Aléatoire": "Shuffle",
+  "Précédent": "Previous",
+  "Lecture / pause": "Play / pause",
+  "Suivant": "Next",
+  "Répéter": "Repeat",
+  "Muet": "Mute",
+  "Volume -": "Volume -",
+  "Volume +": "Volume +",
+  "Favoris & sources": "Favorites & sources",
+  "Réglages du son": "Sound settings",
+  "Actif": "Active",
+  "Basculer": "Switch",
+  "Son de la TV": "TV sound",
+  "Sources TV": "TV sources",
+  "Aucun lecteur configuré.": "No player configured.",
+  "Toucher encore pour éteindre": "Tap again to turn off",
+  "Stable": "Stable",
+  "Frais": "Cool",
+  "Chaud": "Warm",
+  "Confortable": "Comfortable",
+  "Température": "Temperature",
+  "Sec": "Dry",
+  "Humide": "Humid",
+  "Idéal": "Ideal",
+  "Humidité": "Humidity",
+  "Extérieur": "Outside",
+  "Écart": "Difference",
+  "Chauffage": "Heating",
+  "Aucun capteur configuré.": "No sensor configured.",
+  "TV injoignable": "TV unreachable",
+  "Tout est éteint": "Everything is off",
+  "Général": "General",
+  "Ambiance": "Ambience",
+  "Points": "Hotspots",
+  "Scènes": "Scenes",
+  "Comportement": "Behavior",
+  "Identité": "Identity",
+  "Pièce": "Room",
+  "Choisissez la pièce : la carte détecte automatiquement ses entités. Utilisez « Importer » pour figer la liste détectée et la personnaliser ensuite onglet par onglet.": "Choose the room: the card detects its entities automatically. Use “Import” to freeze the detected list and then customize it tab by tab.",
+  "Importer les entités de la pièce": "Import the room's entities",
+  "En-tête": "Header",
+  "Choisissez d'abord une pièce.": "Choose a room first.",
+  "Remplacer les listes actuelles (lumières, volets, appareils, scènes) par celles détectées ?": "Replace the current lists (lights, covers, devices, scenes) with the detected ones?",
+  "Ajouter une entité": "Add an entity",
+  "(sans entité)": "(no entity)",
+  "Monter": "Move up",
+  "Descendre": "Move down",
+  "Supprimer": "Delete",
+  "Détails": "Details",
+  "Les lampes variables se règlent en glissant sur la tuile. Vous pouvez remplacer l'icône par une image (allumée / éteinte).": "Dimmable lamps are adjusted by swiping on the tile. You can replace the icon with an image (on / off).",
+  "Glissez verticalement dans la fenêtre dessinée pour régler la position. Le bouton « My » (Somfy) est détecté automatiquement à l'import.": "Drag vertically in the drawn window to set the position. The “My” button (Somfy) is detected automatically on import.",
+  "Appareils & prises": "Devices & plugs",
+  "Consoles, TV, multiprise… Activez la confirmation pour éviter de couper une console par erreur.": "Consoles, TV, power strip… Enable confirmation to avoid switching off a console by mistake.",
+  "Scènes & raccourcis": "Scenes & shortcuts",
+  "Affichées en barre défilante sous l'image. Appui long = détails de l'entité.": "Shown in a scrolling bar under the image. Long-press = entity details.",
+  "Placement sur l'image": "Placement on the image",
+  "Cliquez sur l'image pour placer le point sélectionné.": "Click on the image to place the selected hotspot.",
+  "Ouvrez un point ci-dessous puis cliquez sur l'image pour le positionner.": "Open a hotspot below, then click on the image to position it.",
+  "Points interactifs": "Interactive hotspots",
+  "Des pastilles posées sur l'image (lampe, TV, fenêtre…) : toucher = action, appui long = détails. Elles s'illuminent quand l'entité est active.": "Dots placed on the image (lamp, TV, window…): tap = action, long-press = details. They light up when the entity is active.",
+  "Détails (more-info)": "Details (more-info)",
+  "Activer (scène / script / bouton)": "Activate (scene / script / button)",
+  "Image de base": "Base image",
+  "Sans image, une illustration animée du salon est générée automatiquement à partir de l'état des entités (ciel, volets, lampes, TV, musique).": "Without an image, an animated illustration of the room is generated automatically from the entities' state (sky, covers, lamps, TV, music).",
+  "Centré": "Center",
+  "Haut": "Top",
+  "Bas": "Bottom",
+  "Gauche": "Left",
+  "Droite": "Right",
+  "Règles d'ambiance": "Ambience rules",
+  "Évaluées dans l'ordre : la <b>première</b> règle dont les conditions sont remplies choisit l'image. Utilisez « Aperçu » pour tester une image sur la carte.": "Evaluated in order: the <b>first</b> rule whose conditions are met chooses the image. Use “Preview” to test an image on the card.",
+  "Ajouter une règle": "Add a rule",
+  "Remplacer les règles existantes par le jeu de règles suggéré ?": "Replace the existing rules with the suggested rule set?",
+  "Générer les règles suggérées (7 ambiances)": "Generate the suggested rules (7 ambiences)",
+  "Correspond aux fichiers décrits dans PROMPTS.md : salon_jour, salon_nuit, salon_nuit_lumieres, salon_tv_jour, salon_tv_nuit, salon_volets_fermes, salon_musique.": "Matches the files described in PROMPTS.md: salon_jour, salon_nuit, salon_nuit_lumieres, salon_tv_jour, salon_tv_nuit, salon_volets_fermes, salon_musique.",
+  "Calques superposés": "Overlay layers",
+  "Images transparentes (PNG) ou sur fond noir (fusion « screen ») qui apparaissent par-dessus l'ambiance quand une entité est active : halo d'une lampe, écran TV allumé…": "Transparent images (PNG) or on a black background (“screen” blend) shown over the ambience when an entity is active: a lamp's glow, a TV screen on…",
+  "Calque": "Layer",
+  "Règle": "Rule",
+  "Aperçu sur la carte": "Preview on the card",
+  "Toutes les conditions (ET)": "All conditions (AND)",
+  "Au moins une condition (OU)": "At least one condition (OR)",
+  "Désactiver cette règle": "Disable this rule",
+  "Retirer la condition": "Remove the condition",
+  "Ajouter une condition": "Add a condition",
+  "Ajouter un calque": "Add a layer",
+  "Seuil (%)": "Threshold (%)",
+  "Mode": "Mode",
+  "Ambiance actuelle :": "Current ambience:",
+  "illustration générée": "generated illustration",
+  "Enceinte": "Speaker",
+  "Télévision": "Television",
+  "La tendance (↑ ↓) et la courbe sont calculées depuis l'historique.": "The trend (↑ ↓) and the chart are computed from history.",
+  "Disposition": "Layout",
+  "Organisation": "Arrangement",
+  "Onglets (compact)": "Tabs (compact)",
+  "Tout afficher (sections empilées)": "Show everything (stacked sections)",
+  "Bannière": "Banner",
+  "Ambiante (l'image floutée colore toute la carte)": "Ambient (the blurred image tints the whole card)",
+  "Automatique : image à gauche, commandes à droite quand la carte est assez large": "Automatic: image on the left, controls on the right when the card is wide enough",
+  "Toujours empilé (image au-dessus)": "Always stacked (image on top)",
+  "3:2 (images ChatGPT 1536×1024)": "3:2 (ChatGPT images 1536×1024)",
+  "2:1 (panoramique)": "2:1 (panoramic)",
+  "Automatique": "Automatic",
+  "Interactions": "Interactions",
+  "Allumer / éteindre": "Turn on / off",
+  "Ouvrir les détails": "Open details",
+  "Rien": "Nothing",
+  "« Tout éteindre » agit sur…": "“All off” acts on…",
+  "Nom affiché": "Display name",
+  "Icône": "Icon",
+  "Pièce (découverte automatique)": "Room (automatic discovery)",
+  "Météo": "Weather",
+  "Mode maison (input_select)": "House mode (input_select)",
+  "Afficher température / humidité dans l'en-tête": "Show temperature / humidity in the header",
+  "Entité": "Entity",
+  "Image": "Image",
+  "Image quand allumé": "Image when on",
+  "Couleur (CSS)": "Color (CSS)",
+  "Bouton « My » (position favorite)": "“My” button (favorite position)",
+  "Enceinte / lecteur principal": "Main speaker / player",
+  "TV (media_player)": "TV (media_player)",
+  "Prise / alimentation TV": "TV plug / power",
+  "Nom de la TV": "TV name",
+  "Ambilight / lumière TV": "Ambilight / TV light",
+  "Afficher les favoris / sources": "Show favorites / sources",
+  "Favoris à afficher (vide = tous)": "Favorites to show (empty = all)",
+  "Réglages du son (interrupteurs)": "Sound settings (switches)",
+  "Capteur de puissance (W)": "Power sensor (W)",
+  "Confirmer avant d'éteindre": "Confirm before turning off",
+  "Demander confirmation": "Ask for confirmation",
+  "Capteur de température": "Temperature sensor",
+  "Capteur d'humidité": "Humidity sensor",
+  "Thermostat (climate)": "Thermostat (climate)",
+  "Confort min (°C)": "Comfort min (°C)",
+  "Confort max (°C)": "Comfort max (°C)",
+  "Afficher le graphique": "Show the chart",
+  "Historique (heures)": "History (hours)",
+  "Afficher l'image d'ambiance": "Show the ambient image",
+  "Style": "Style",
+  "Format de l'image": "Image aspect ratio",
+  "Disposition en paysage / grand écran": "Landscape / large screen layout",
+  "Largeur de carte à partir de laquelle passer en 2 colonnes": "Card width from which to switch to 2 columns",
+  "Part de l'image en 2 colonnes": "Image share in 2 columns",
+  "Onglet par défaut": "Default tab",
+  "Mémoriser le dernier onglet": "Remember last tab",
+  "Basculer sur Média quand la lecture démarre": "Switch to Media when playback starts",
+  "Résumé sur l'image": "Summary on the image",
+  "Barre de scènes": "Scene bar",
+  "Bouton « Tout éteindre »": "“All off” button",
+  "Masquer les entités indisponibles": "Hide unavailable entities",
+  "Couleur d'accent (CSS)": "Accent color (CSS)",
+  "Toucher une lampe": "Tapping a lamp",
+  "Appui long": "Long-press",
+  "Retour haptique (app mobile)": "Haptic feedback (mobile app)",
+  "Confirmer « Tout éteindre »": "Confirm “All off”",
+  "Éteindre les lumières": "Turn off the lights",
+  "Éteindre les appareils": "Turn off the devices",
+  "Mettre en pause / éteindre la TV": "Pause / turn off the TV",
+  "Fermer les volets": "Close the covers",
+  "Durée du fondu (ms)": "Fade duration (ms)",
+  "Cadrage de l'image": "Image framing",
+  "Assombrir la nuit (%)": "Dim at night (%)",
+  "Position horizontale (%)": "Horizontal position (%)",
+  "Position verticale (%)": "Vertical position (%)",
+  "Action au toucher": "Tap action",
+  "Afficher le nom": "Show the name",
+  "Mode de fusion": "Blend mode",
+  "Opacité": "Opacity",
+  "Opacité selon la luminosité": "Opacity from brightness",
+  "Type de condition": "Condition type",
+  "Opérateur": "Operator",
+  "Valeur(s) — séparées par des virgules": "Value(s) — comma-separated",
+  "Attribut (optionnel)": "Attribute (optional)",
+  "Filtre CSS (optionnel)": "CSS filter (optional)",
+  "Logique": "Logic",
+  "Dossier des images": "Image folder",
+  "Remplit automatiquement lumières, volets, média, prises, scènes et capteurs de la pièce si les listes sont vides.": "Automatically fills in the room's lights, covers, media, plugs, scenes and sensors when the lists are empty.",
+  "Chemin /local/… (dossier config/www) ou URL. Format conseillé 3:2 (1536×1024).": "Path /local/… (config/www folder) or URL. Recommended ratio 3:2 (1536×1024).",
+  "Ex. : grayscale(0.7) brightness(0.8) — appliqué à l'image de cette règle.": "E.g. grayscale(0.7) brightness(0.8) — applied to this rule's image.",
+  "Laissez vide pour afficher tous les favoris de l'enceinte.": "Leave empty to show all the speaker's favorites.",
+  "« screen » rend le noir transparent : idéal pour des calques de lueur sur fond noir.": "“screen” makes black transparent: ideal for glow layers on a black background.",
+  "Assombrit l'image la nuit quand tout est éteint.": "Dims the image at night when everything is off.",
+  "Utilisée pour allumer la TV lorsqu'elle est hors réseau (ex. prise de la multiprise).": "Used to turn on the TV when it is off the network (e.g. the power strip plug).",
+};
+
+// Langue de l'interface : celle de Home Assistant (français ou anglais, anglais par défaut)
+let lang = (navigator.language || "").startsWith("fr") ? "fr" : "en";
+const setLang = (hass) => {
+  const l = hass?.locale?.language || hass?.language;
+  if (l) lang = l.startsWith("fr") ? "fr" : "en";
+};
+const tr = (fr, vars = {}) =>
+  ((lang === "fr" ? fr : EN[fr]) ?? fr).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+
 const DEFAULT_CONFIG = {
-  name: "Salon",
+  name: tr("Salon"),
   icon: "mdi:sofa",
   area: "",
   header: { weather: "", mode: "", show_temperature: true },
@@ -62,33 +328,33 @@ const DEFAULT_CONFIG = {
 };
 
 const TABS = [
-  { id: "lights", icon: "mdi:lightbulb-group", label: "Lumières" },
-  { id: "covers", icon: "mdi:window-shutter", label: "Volets" },
-  { id: "media", icon: "mdi:music-box-multiple", label: "Média" },
-  { id: "devices", icon: "mdi:power-socket-eu", label: "Appareils" },
-  { id: "climate", icon: "mdi:thermometer", label: "Climat" },
+  { id: "lights", icon: "mdi:lightbulb-group", get label() { return tr("Lumières"); } },
+  { id: "covers", icon: "mdi:window-shutter", get label() { return tr("Volets"); } },
+  { id: "media", icon: "mdi:music-box-multiple", get label() { return tr("Média"); } },
+  { id: "devices", icon: "mdi:power-socket-eu", get label() { return tr("Appareils"); } },
+  { id: "climate", icon: "mdi:thermometer", get label() { return tr("Climat"); } },
 ];
 
 const CONDITION_TYPES = [
-  { value: "entity", label: "État d'une entité" },
-  { value: "night", label: "Il fait nuit (soleil couché)" },
-  { value: "day", label: "Il fait jour" },
-  { value: "lights_on", label: "Au moins une lumière allumée" },
-  { value: "lights_off", label: "Toutes les lumières éteintes" },
-  { value: "tv_on", label: "TV allumée" },
-  { value: "media_playing", label: "Musique / média en lecture" },
-  { value: "covers_closed", label: "Volets fermés (moyenne ≤ seuil %)" },
-  { value: "covers_open", label: "Volets ouverts (moyenne ≥ seuil %)" },
-  { value: "mode", label: "Mode maison = valeur" },
+  { value: "entity", get label() { return tr("État d'une entité"); } },
+  { value: "night", get label() { return tr("Il fait nuit (soleil couché)"); } },
+  { value: "day", get label() { return tr("Il fait jour"); } },
+  { value: "lights_on", get label() { return tr("Au moins une lumière allumée"); } },
+  { value: "lights_off", get label() { return tr("Toutes les lumières éteintes"); } },
+  { value: "tv_on", get label() { return tr("TV allumée"); } },
+  { value: "media_playing", get label() { return tr("Musique / média en lecture"); } },
+  { value: "covers_closed", get label() { return tr("Volets fermés (moyenne ≤ seuil %)"); } },
+  { value: "covers_open", get label() { return tr("Volets ouverts (moyenne ≥ seuil %)"); } },
+  { value: "mode", get label() { return tr("Mode maison = valeur"); } },
 ];
 
 const OPERATORS = [
-  { value: "is", label: "est égal à" },
-  { value: "is_not", label: "est différent de" },
-  { value: "active", label: "est actif (on / ouvert / lecture…)" },
-  { value: "inactive", label: "est inactif" },
-  { value: "above", label: "est supérieur à" },
-  { value: "below", label: "est inférieur à" },
+  { value: "is", get label() { return tr("est égal à"); } },
+  { value: "is_not", get label() { return tr("est différent de"); } },
+  { value: "active", get label() { return tr("est actif (on / ouvert / lecture…)"); } },
+  { value: "inactive", get label() { return tr("est inactif"); } },
+  { value: "above", get label() { return tr("est supérieur à"); } },
+  { value: "below", get label() { return tr("est inférieur à"); } },
 ];
 
 const ACTIVE_STATES = ["on", "open", "opening", "closing", "playing", "home", "heat", "cool", "heat_cool", "auto", "dry", "fan_only", "active", "unlocked", "buffering"];
@@ -163,7 +429,7 @@ function formatTime(sec) {
 
 function fmtNum(v, digits = 1) {
   const n = parseFloat(v);
-  return isNaN(n) ? "—" : n.toLocaleString("fr-FR", { minimumFractionDigits: digits, maximumFractionDigits: digits });
+  return isNaN(n) ? "—" : n.toLocaleString(lang === "fr" ? "fr-FR" : "en", { minimumFractionDigits: digits, maximumFractionDigits: digits });
 }
 
 /** Normalise une entrée de liste : "light.x" ou {entity: "light.x", ...}. */
@@ -355,23 +621,23 @@ function computeScene(hass, cfg) {
   for (let i = 0; i < rules.length; i++) {
     if (rules[i].disabled) continue;
     if (evalRule(hass, ctx, rules[i])) {
-      return { ctx, index: i, image: rules[i].image || cfg.images.default, filter: rules[i].filter || "", name: rules[i].name || `Règle ${i + 1}` };
+      return { ctx, index: i, image: rules[i].image || cfg.images.default, filter: rules[i].filter || "", name: rules[i].name || tr("Règle {n}", { n: i + 1 }) };
     }
   }
-  return { ctx, index: -1, image: cfg.images.default, filter: "", name: "Image par défaut" };
+  return { ctx, index: -1, image: cfg.images.default, filter: "", name: tr("Image par défaut") };
 }
 
 /** Règles d'ambiance proposées, alignées avec les noms de fichiers du guide des prompts. */
 function suggestedRules(folder = "/local/salon/") {
   const f = folder.endsWith("/") ? folder : folder + "/";
   return [
-    { name: "Cinéma (TV la nuit)", image: f + "salon_tv_nuit.jpg", match: "all", conditions: [{ condition: "tv_on" }, { condition: "night" }] },
-    { name: "TV en journée", image: f + "salon_tv_jour.jpg", match: "all", conditions: [{ condition: "tv_on" }] },
-    { name: "Soirée lumières", image: f + "salon_nuit_lumieres.jpg", match: "all", conditions: [{ condition: "night" }, { condition: "lights_on" }] },
-    { name: "Nuit", image: f + "salon_nuit.jpg", match: "all", conditions: [{ condition: "night" }] },
-    { name: "Volets fermés", image: f + "salon_volets_fermes.jpg", match: "all", conditions: [{ condition: "covers_closed", value: 20 }] },
-    { name: "Musique", image: f + "salon_musique.jpg", match: "all", conditions: [{ condition: "media_playing" }] },
-    { name: "Absent", image: f + "salon_jour.jpg", filter: "grayscale(0.7) brightness(0.8)", match: "all", conditions: [{ condition: "mode", value: "Absent" }] },
+    { name: tr("Cinéma (TV la nuit)"), image: f + "salon_tv_nuit.jpg", match: "all", conditions: [{ condition: "tv_on" }, { condition: "night" }] },
+    { name: tr("TV en journée"), image: f + "salon_tv_jour.jpg", match: "all", conditions: [{ condition: "tv_on" }] },
+    { name: tr("Soirée lumières"), image: f + "salon_nuit_lumieres.jpg", match: "all", conditions: [{ condition: "night" }, { condition: "lights_on" }] },
+    { name: tr("Nuit"), image: f + "salon_nuit.jpg", match: "all", conditions: [{ condition: "night" }] },
+    { name: tr("Volets fermés"), image: f + "salon_volets_fermes.jpg", match: "all", conditions: [{ condition: "covers_closed", value: 20 }] },
+    { name: tr("Musique"), image: f + "salon_musique.jpg", match: "all", conditions: [{ condition: "media_playing" }] },
+    { name: tr("Absent"), image: f + "salon_jour.jpg", filter: "grayscale(0.7) brightness(0.8)", match: "all", conditions: [{ condition: "mode", value: "Absent" }] },
   ];
 }
 
@@ -679,9 +945,10 @@ class LivingroomCard extends HTMLElement {
   }
 
   static getStubConfig(hass) {
+    setLang(hass);
     const areas = hass && hass.areas ? Object.values(hass.areas) : [];
     const salon = areas.find((a) => /salon|séjour|sejour|living/i.test(a.name || a.area_id)) || areas[0];
-    return { name: salon ? salon.name : "Salon", area: salon ? salon.area_id : "" };
+    return { name: salon ? salon.name : tr("Salon"), area: salon ? salon.area_id : "" };
   }
 
   constructor() {
@@ -699,7 +966,7 @@ class LivingroomCard extends HTMLElement {
   }
 
   setConfig(config) {
-    if (!config) throw new Error("Configuration invalide");
+    if (!config) throw new Error(tr("Configuration invalide"));
     this._raw = config;
     this._cfg = null;
     this._built = false;
@@ -710,6 +977,7 @@ class LivingroomCard extends HTMLElement {
 
   set hass(hass) {
     this._hass = hass;
+    setLang(hass);
     if (!this._raw) return;
     if (!this._built) this._build();
     else this._update();
@@ -904,7 +1172,7 @@ class LivingroomCard extends HTMLElement {
     if (!force && this._sigs.panels === sig) return;
     this._sigs.panels = sig;
     if (!ids.length) {
-      panels.innerHTML = `<div class="empty">Aucune entité configurée. Ouvrez l'éditeur visuel pour choisir une pièce ou ajouter des entités.</div>`;
+      panels.innerHTML = `<div class="empty">${tr("Aucune entité configurée. Ouvrez l'éditeur visuel pour choisir une pièce ou ajouter des entités.")}</div>`;
       return;
     }
     panels.innerHTML = ids.map((id) => `<div class="panel" data-panel="${id}">${this._renderPanel(id, ctx)}</div>`).join("");
@@ -1048,20 +1316,20 @@ class LivingroomCard extends HTMLElement {
     const parts = [];
     if (ctx.lightCount) {
       parts.push(ctx.lightsOn
-        ? `<span><ha-icon icon="mdi:lightbulb-on"></ha-icon>${ctx.lightsOn} allumée${ctx.lightsOn > 1 ? "s" : ""}</span>`
-        : `<span><ha-icon icon="mdi:lightbulb-off-outline"></ha-icon>Lumières éteintes</span>`);
+        ? `<span><ha-icon icon="mdi:lightbulb-on"></ha-icon>${tr(ctx.lightsOn > 1 ? "{n} allumées" : "{n} allumée", { n: ctx.lightsOn })}</span>`
+        : `<span><ha-icon icon="mdi:lightbulb-off-outline"></ha-icon>${tr("Lumières éteintes")}</span>`);
     }
     if (ctx.coverAvg !== null) {
-      const txt = ctx.coverAvg >= 95 ? "Volets ouverts" : ctx.coverAvg <= 5 ? "Volets fermés" : `Volets à ${ctx.coverAvg} %`;
+      const txt = ctx.coverAvg >= 95 ? tr("Volets ouverts") : ctx.coverAvg <= 5 ? tr("Volets fermés") : tr("Volets à {n} %", { n: ctx.coverAvg });
       parts.push(`<span><ha-icon icon="mdi:window-shutter${ctx.coverAvg >= 95 ? "-open" : ""}"></ha-icon>${txt}</span>`);
     }
     if (ctx.playing && ctx.player) {
       const a = ctx.player.attributes;
-      parts.push(`<span><ha-icon icon="mdi:play-circle"></ha-icon>${esc(a.media_title || a.source || "Lecture")}${a.media_artist ? " · " + esc(String(a.media_artist).split(",")[0]) : ""}</span>`);
+      parts.push(`<span><ha-icon icon="mdi:play-circle"></ha-icon>${esc(a.media_title || a.source || tr("Lecture"))}${a.media_artist ? " · " + esc(String(a.media_artist).split(",")[0]) : ""}</span>`);
     }
-    if (ctx.tvOn) parts.push(`<span><ha-icon icon="mdi:television"></ha-icon>TV allumée</span>`);
+    if (ctx.tvOn) parts.push(`<span><ha-icon icon="mdi:television"></ha-icon>${tr("TV allumée")}</span>`);
     const devOn = this._cfg.devices.filter((d) => isActiveState(this._hass.states[d.entity])).length;
-    if (devOn) parts.push(`<span><ha-icon icon="mdi:power-plug"></ha-icon>${devOn} appareil${devOn > 1 ? "s" : ""}</span>`);
+    if (devOn) parts.push(`<span><ha-icon icon="mdi:power-plug"></ha-icon>${tr(devOn > 1 ? "{n} appareils" : "{n} appareil", { n: devOn })}</span>`);
     return parts.join("");
   }
 
@@ -1091,7 +1359,7 @@ class LivingroomCard extends HTMLElement {
     const h = this._hass;
     const out = [];
     if (cfg.layout.show_all_off) {
-      out.push(`<button class="chip danger" data-g data-tap="all-off" ${cfg.behavior.confirm_all_off ? `data-confirm="Toucher encore pour tout éteindre"` : ""} data-key="all-off"><ha-icon icon="mdi:power"></ha-icon>Tout éteindre</button>`);
+      out.push(`<button class="chip danger" data-g data-tap="all-off" ${cfg.behavior.confirm_all_off ? `data-confirm="${tr("Toucher encore pour tout éteindre")}"` : ""} data-key="all-off"><ha-icon icon="mdi:power"></ha-icon>${tr("Tout éteindre")}</button>`);
     }
     for (const sc of cfg.scenes) {
       const s = h.states[sc.entity];
@@ -1100,7 +1368,7 @@ class LivingroomCard extends HTMLElement {
       const icon = sc.icon || (s && s.attributes.icon && !String(s.attributes.icon).startsWith("fas:") ? s.attributes.icon : (DOMAIN_ICONS[d] || ["mdi:play"])[0]);
       const name = sc.name || (s ? s.attributes.friendly_name : sc.entity);
       const running = d === "script" && s && s.state === "on";
-      out.push(`<button class="chip ${running ? "on" : ""}" style="${sc.color ? `--chip-color:${esc(sc.color)}` : ""}" data-g data-tap="activate" data-hold="more-info" data-entity="${esc(sc.entity)}" ${sc.confirm ? `data-confirm="Confirmer « ${esc(name)} » ?"` : ""} data-key="sc-${esc(sc.entity)}"><ha-icon icon="${esc(icon)}"></ha-icon>${esc(name)}</button>`);
+      out.push(`<button class="chip ${running ? "on" : ""}" style="${sc.color ? `--chip-color:${esc(sc.color)}` : ""}" data-g data-tap="activate" data-hold="more-info" data-entity="${esc(sc.entity)}" ${sc.confirm ? `data-confirm="${esc(tr("Confirmer « {name} » ?", { name }))}"` : ""} data-key="sc-${esc(sc.entity)}"><ha-icon icon="${esc(icon)}"></ha-icon>${esc(name)}</button>`);
     }
     return out.join("");
   }
@@ -1144,7 +1412,7 @@ class LivingroomCard extends HTMLElement {
     const items = this._visible(this._cfg.lights);
     const anyOn = ctx.lightsOn > 0;
     const header = this._sectionHeader("lights", items.length > 1
-      ? `<button class="btn sm ${anyOn ? "active" : ""}" style="--btn-color:var(--lrc-light)" data-g data-tap="lights-all" data-value="${anyOn ? "off" : "on"}" title="${anyOn ? "Tout éteindre" : "Tout allumer"}"><ha-icon icon="${anyOn ? "mdi:lightbulb-group-off" : "mdi:lightbulb-group"}"></ha-icon></button>`
+      ? `<button class="btn sm ${anyOn ? "active" : ""}" style="--btn-color:var(--lrc-light)" data-g data-tap="lights-all" data-value="${anyOn ? "off" : "on"}" title="${anyOn ? tr("Tout éteindre") : tr("Tout allumer")}"><ha-icon icon="${anyOn ? "mdi:lightbulb-group-off" : "mdi:lightbulb-group"}"></ha-icon></button>`
       : "");
     const tiles = items.map((l) => {
       const s = h.states[l.entity];
@@ -1156,7 +1424,7 @@ class LivingroomCard extends HTMLElement {
       const name = l.name || (s ? s.attributes.friendly_name : l.entity);
       const icon = l.icon || (s && s.attributes.icon) || DOMAIN_ICONS.light[on ? 1 : 0];
       const img = on ? l.image_on || l.image : l.image;
-      const state = unav ? "Indisponible" : on ? (dimmable ? `${pct} %` : "Allumée") : "Éteinte";
+      const state = unav ? tr("Indisponible") : on ? (dimmable ? `${pct} %` : tr("Allumée")) : tr("Éteinte");
       const tap = B.light_tap === "more-info" ? "more-info" : "toggle";
       return `<div class="tile ${on ? "on" : ""} ${unav ? "unavail" : ""}" style="--tile-color:${esc(l.color || "var(--lrc-light)")};--val:${dimmable ? pct : on ? 100 : 0}"
           data-g data-tap="${unav ? "more-info" : tap}" ${B.hold === "more-info" ? `data-hold="more-info"` : ""} ${dimmable && !unav ? `data-drag="brightness" data-axis="x"` : ""} data-entity="${esc(l.entity)}">
@@ -1165,7 +1433,7 @@ class LivingroomCard extends HTMLElement {
         <div class="tx"><span class="nm">${esc(name)}</span><span class="stt" data-val>${state}</span></div>
       </div>`;
     }).join("");
-    const dimHint = items.some((l) => domainOf(l.entity) === "light") ? `<div class="hint">Astuce : glissez horizontalement sur une lampe pour régler la luminosité, appui long pour plus d'options.</div>` : "";
+    const dimHint = items.some((l) => domainOf(l.entity) === "light") ? `<div class="hint">${tr("Astuce : glissez horizontalement sur une lampe pour régler la luminosité, appui long pour plus d'options.")}</div>` : "";
     return header + `<div class="grid">${tiles}</div>` + (this._cfg.layout.mode === "tabs" ? dimHint : "");
   }
 
@@ -1177,10 +1445,10 @@ class LivingroomCard extends HTMLElement {
     const [s1, s2] = skyColors(ctx.elevation);
     const hasMy = items.some((c) => c.my_button);
     const allBtns = items.length > 1 ? `<div class="allbar">
-        <button class="btn sm" data-g data-tap="covers-all" data-value="open" title="Tout ouvrir"><ha-icon icon="mdi:arrow-up"></ha-icon></button>
-        <button class="btn sm" data-g data-tap="covers-all" data-value="stop" title="Tout arrêter"><ha-icon icon="mdi:stop"></ha-icon></button>
-        <button class="btn sm" data-g data-tap="covers-all" data-value="close" title="Tout fermer"><ha-icon icon="mdi:arrow-down"></ha-icon></button>
-        ${hasMy ? `<button class="btn sm" data-g data-tap="covers-all" data-value="my" title="Position favorite (My)"><ha-icon icon="mdi:star-outline"></ha-icon></button>` : ""}
+        <button class="btn sm" data-g data-tap="covers-all" data-value="open" title="${tr("Tout ouvrir")}"><ha-icon icon="mdi:arrow-up"></ha-icon></button>
+        <button class="btn sm" data-g data-tap="covers-all" data-value="stop" title="${tr("Tout arrêter")}"><ha-icon icon="mdi:stop"></ha-icon></button>
+        <button class="btn sm" data-g data-tap="covers-all" data-value="close" title="${tr("Tout fermer")}"><ha-icon icon="mdi:arrow-down"></ha-icon></button>
+        ${hasMy ? `<button class="btn sm" data-g data-tap="covers-all" data-value="my" title="${tr("Position favorite (My)")}"><ha-icon icon="mdi:star-outline"></ha-icon></button>` : ""}
       </div>` : "";
     const header = this._sectionHeader("covers", allBtns);
     const cards = items.map((c) => {
@@ -1191,23 +1459,23 @@ class LivingroomCard extends HTMLElement {
       const canSet = s && ((s.attributes.supported_features || 0) & 4) === 4 && hasPos;
       const pos = hasPos ? Number(s.attributes.current_position) : s && s.state === "open" ? 100 : s && s.state === "closed" ? 0 : null;
       const moving = s && (s.state === "opening" || s.state === "closing");
-      const label = unav ? "Indisponible" : moving ? (s.state === "opening" ? "Ouverture…" : "Fermeture…") : pos === null ? "Inconnu" : pos >= 100 ? "Ouvert" : pos <= 0 ? "Fermé" : `${pos} %`;
+      const label = unav ? tr("Indisponible") : moving ? (s.state === "opening" ? tr("Ouverture…") : tr("Fermeture…")) : pos === null ? tr("Inconnu") : pos >= 100 ? tr("Ouvert") : pos <= 0 ? tr("Fermé") : `${pos} %`;
       return `<div class="cover ${unav ? "unavail" : ""}">
         <div class="ch"><span class="nm">${esc(name)}</span><span class="pv" data-val>${label}</span></div>
         <div class="win ${canSet ? "" : "noset"}" style="--sky1:${s1};--sky2:${s2};--val:${pos === null ? 50 : pos}"
           data-g ${canSet ? `data-drag="position" data-axis="y"` : ""} data-tap="more-info" data-entity="${esc(c.entity)}">
-          <div class="sl"></div><div class="bar"></div>${pos === null && !unav ? `<div class="unk">Position non remontée</div>` : ""}
+          <div class="sl"></div><div class="bar"></div>${pos === null && !unav ? `<div class="unk">${tr("Position non remontée")}</div>` : ""}
         </div>
         <div class="btns">
-          <button class="btn sm" data-g data-tap="call" data-svc="cover.open_cover" data-entity="${esc(c.entity)}" title="Ouvrir"><ha-icon icon="mdi:arrow-up"></ha-icon></button>
-          <button class="btn sm" data-g data-tap="call" data-svc="cover.stop_cover" data-entity="${esc(c.entity)}" title="Stop"><ha-icon icon="mdi:stop"></ha-icon></button>
-          ${c.my_button ? `<button class="btn sm" data-g data-tap="call" data-svc="button.press" data-entity="${esc(c.my_button)}" title="Position favorite (My)"><ha-icon icon="mdi:star-outline"></ha-icon></button>` : ""}
-          <button class="btn sm" data-g data-tap="call" data-svc="cover.close_cover" data-entity="${esc(c.entity)}" title="Fermer"><ha-icon icon="mdi:arrow-down"></ha-icon></button>
+          <button class="btn sm" data-g data-tap="call" data-svc="cover.open_cover" data-entity="${esc(c.entity)}" title="${tr("Ouvrir")}"><ha-icon icon="mdi:arrow-up"></ha-icon></button>
+          <button class="btn sm" data-g data-tap="call" data-svc="cover.stop_cover" data-entity="${esc(c.entity)}" title="${tr("Stop")}"><ha-icon icon="mdi:stop"></ha-icon></button>
+          ${c.my_button ? `<button class="btn sm" data-g data-tap="call" data-svc="button.press" data-entity="${esc(c.my_button)}" title="${tr("Position favorite (My)")}"><ha-icon icon="mdi:star-outline"></ha-icon></button>` : ""}
+          <button class="btn sm" data-g data-tap="call" data-svc="cover.close_cover" data-entity="${esc(c.entity)}" title="${tr("Fermer")}"><ha-icon icon="mdi:arrow-down"></ha-icon></button>
         </div>
       </div>`;
     }).join("");
     const hint = this._cfg.layout.mode === "tabs" && items.some((c) => { const s = h.states[c.entity]; return s && s.attributes.current_position !== undefined; })
-      ? `<div class="hint">Astuce : faites glisser verticalement dans la fenêtre pour régler précisément la position.</div>` : "";
+      ? `<div class="hint">${tr("Astuce : faites glisser verticalement dans la fenêtre pour régler précisément la position.")}</div>` : "";
     return header + `<div class="covers">${cards}</div>` + hint;
   }
 
@@ -1234,7 +1502,7 @@ class LivingroomCard extends HTMLElement {
       const vol = a.volume_level !== undefined ? Math.round(a.volume_level * 100) : 0;
       const dur = Number(a.media_duration) || 0;
       const pos = this._mediaPosition(p);
-      const title = a.media_title || (p.state === "off" || p.state === "idle" ? "Rien en lecture" : a.source || a.friendly_name);
+      const title = a.media_title || (p.state === "off" || p.state === "idle" ? tr("Rien en lecture") : a.source || a.friendly_name);
       const artist = a.media_artist || a.media_album_name || a.friendly_name || "";
       html += `<div class="media">
         ${pic ? `<div class="art-bg" style="background-image:url('${esc(pic)}')"></div>` : ""}
@@ -1243,33 +1511,33 @@ class LivingroomCard extends HTMLElement {
           <div class="meta">
             <div class="ttl">${esc(title)}</div>
             <div class="art-name">${esc(artist)}</div>
-            <div class="src">${esc(a.friendly_name || "")}${a.source ? " · " + esc(a.source) : ""}${unav ? " · indisponible" : ""}</div>
+            <div class="src">${esc(a.friendly_name || "")}${a.source ? " · " + esc(a.source) : ""}${unav ? " · " + tr("indisponible") : ""}</div>
           </div>
         </div>
         ${dur ? `<div class="prog" data-g data-drag="seek" data-axis="x" data-entity="${esc(m.player)}" style="--val:${(pos / dur) * 100}" data-dur="${dur}">
             <div class="track"><div class="done"></div></div></div>
           <div class="times"><span data-pos>${formatTime(pos)}</span><span>${formatTime(dur)}</span></div>` : ""}
         <div class="mctrl">
-          <button class="btn ghost ${a.shuffle ? "active" : ""}" data-g data-tap="shuffle" data-entity="${esc(m.player)}" title="Aléatoire"><ha-icon icon="mdi:shuffle-variant"></ha-icon></button>
-          <button class="btn" data-g data-tap="call" data-svc="media_player.media_previous_track" data-entity="${esc(m.player)}" title="Précédent"><ha-icon icon="mdi:skip-previous"></ha-icon></button>
-          <button class="btn play" data-g data-tap="call" data-svc="media_player.media_play_pause" data-entity="${esc(m.player)}" title="Lecture / pause"><ha-icon icon="${playing ? "mdi:pause" : "mdi:play"}"></ha-icon></button>
-          <button class="btn" data-g data-tap="call" data-svc="media_player.media_next_track" data-entity="${esc(m.player)}" title="Suivant"><ha-icon icon="mdi:skip-next"></ha-icon></button>
-          <button class="btn ghost ${a.repeat && a.repeat !== "off" ? "active" : ""}" data-g data-tap="repeat" data-entity="${esc(m.player)}" title="Répéter"><ha-icon icon="${a.repeat === "one" ? "mdi:repeat-once" : a.repeat === "all" ? "mdi:repeat" : "mdi:repeat-off"}"></ha-icon></button>
+          <button class="btn ghost ${a.shuffle ? "active" : ""}" data-g data-tap="shuffle" data-entity="${esc(m.player)}" title="${tr("Aléatoire")}"><ha-icon icon="mdi:shuffle-variant"></ha-icon></button>
+          <button class="btn" data-g data-tap="call" data-svc="media_player.media_previous_track" data-entity="${esc(m.player)}" title="${tr("Précédent")}"><ha-icon icon="mdi:skip-previous"></ha-icon></button>
+          <button class="btn play" data-g data-tap="call" data-svc="media_player.media_play_pause" data-entity="${esc(m.player)}" title="${tr("Lecture / pause")}"><ha-icon icon="${playing ? "mdi:pause" : "mdi:play"}"></ha-icon></button>
+          <button class="btn" data-g data-tap="call" data-svc="media_player.media_next_track" data-entity="${esc(m.player)}" title="${tr("Suivant")}"><ha-icon icon="mdi:skip-next"></ha-icon></button>
+          <button class="btn ghost ${a.repeat && a.repeat !== "off" ? "active" : ""}" data-g data-tap="repeat" data-entity="${esc(m.player)}" title="${tr("Répéter")}"><ha-icon icon="${a.repeat === "one" ? "mdi:repeat-once" : a.repeat === "all" ? "mdi:repeat" : "mdi:repeat-off"}"></ha-icon></button>
         </div>
         <div class="vol">
-          <button class="btn sm" data-g data-tap="mute" data-entity="${esc(m.player)}" title="Muet"><ha-icon icon="${a.is_volume_muted ? "mdi:volume-off" : vol < 30 ? "mdi:volume-low" : vol < 70 ? "mdi:volume-medium" : "mdi:volume-high"}"></ha-icon></button>
+          <button class="btn sm" data-g data-tap="mute" data-entity="${esc(m.player)}" title="${tr("Muet")}"><ha-icon icon="${a.is_volume_muted ? "mdi:volume-off" : vol < 30 ? "mdi:volume-low" : vol < 70 ? "mdi:volume-medium" : "mdi:volume-high"}"></ha-icon></button>
           <div class="slider" style="--val:${vol}" data-g data-drag="volume" data-axis="x" data-entity="${esc(m.player)}"><div class="sf"></div><span class="sv" data-val>${vol} %</span></div>
-          <button class="btn sm" data-g data-tap="call" data-svc="media_player.volume_down" data-entity="${esc(m.player)}" title="Volume -"><ha-icon icon="mdi:minus"></ha-icon></button>
-          <button class="btn sm" data-g data-tap="call" data-svc="media_player.volume_up" data-entity="${esc(m.player)}" title="Volume +"><ha-icon icon="mdi:plus"></ha-icon></button>
+          <button class="btn sm" data-g data-tap="call" data-svc="media_player.volume_down" data-entity="${esc(m.player)}" title="${tr("Volume -")}"><ha-icon icon="mdi:minus"></ha-icon></button>
+          <button class="btn sm" data-g data-tap="call" data-svc="media_player.volume_up" data-entity="${esc(m.player)}" title="${tr("Volume +")}"><ha-icon icon="mdi:plus"></ha-icon></button>
         </div>`;
       const sources = (m.sources && m.sources.length ? m.sources : a.source_list || []).filter(Boolean);
       if (m.show_sources && sources.length) {
-        html += `<div class="subh">Favoris & sources</div><div class="hscroll">${sources.map((src) =>
+        html += `<div class="subh">${tr("Favoris & sources")}</div><div class="hscroll">${sources.map((src) =>
           `<button class="chip ${src === a.source ? "on" : ""}" style="--chip-color:var(--lrc-media)" data-g data-tap="source" data-value="${esc(src)}" data-entity="${esc(m.player)}"><ha-icon icon="${src === "TV" ? "mdi:television" : /fm|radio|europe|bbc|inter|rtl/i.test(src) ? "mdi:radio" : "mdi:playlist-music"}"></ha-icon>${esc(src)}</button>`).join("")}</div>`;
       }
       const sc = (m.sound_controls || []).filter((id) => h.states[id]);
       if (sc.length) {
-        html += `<div class="subh">Réglages du son</div><div class="hscroll">${sc.map((id) => {
+        html += `<div class="subh">${tr("Réglages du son")}</div><div class="hscroll">${sc.map((id) => {
           const s = h.states[id];
           const on = s.state === "on";
           const nm = String(s.attributes.friendly_name || id).replace(new RegExp("^" + (a.friendly_name || "") + "\\s*", "i"), "");
@@ -1286,27 +1554,27 @@ class LivingroomCard extends HTMLElement {
       const tvName = (h.states[m.tv] && h.states[m.tv].attributes.friendly_name) || "TV";
       tvTiles.push(`<div class="tile ${ctx.tvOn ? "on" : ""}" style="--tile-color:var(--lrc-media)" data-g data-tap="tv-power" data-hold="more-info" data-entity="${esc(m.tv || m.tv_power)}">
         <div class="ic"><ha-icon icon="mdi:television${ctx.tvOn ? "" : "-off"}"></ha-icon></div>
-        <div class="tx"><span class="nm">${esc(m.tv_name || tvName)}</span><span class="stt">${ctx.tvOn ? "Allumée" : "Éteinte"}</span></div></div>`);
+        <div class="tx"><span class="nm">${esc(m.tv_name || tvName)}</span><span class="stt">${ctx.tvOn ? tr("Allumée") : tr("Éteinte")}</span></div></div>`);
     }
     if (m.ambilight && h.states[m.ambilight]) {
       const s = h.states[m.ambilight];
       const on = s.state === "on";
       tvTiles.push(`<div class="tile ${on ? "on" : ""} ${s.state === "unavailable" ? "unavail" : ""}" style="--tile-color:#7f5cff" data-g data-tap="toggle" data-hold="more-info" data-entity="${esc(m.ambilight)}">
         <div class="ic"><ha-icon icon="mdi:television-ambient-light"></ha-icon></div>
-        <div class="tx"><span class="nm">Ambilight</span><span class="stt">${s.state === "unavailable" ? "Indisponible" : on ? "Allumé" : "Éteint"}</span></div></div>`);
+        <div class="tx"><span class="nm">Ambilight</span><span class="stt">${s.state === "unavailable" ? tr("Indisponible") : on ? tr("Allumé") : tr("Éteint")}</span></div></div>`);
     }
     if (p && (p.attributes.source_list || []).includes("TV")) {
       tvTiles.push(`<div class="tile ${p.attributes.source === "TV" ? "on" : ""}" style="--tile-color:var(--lrc-media)" data-g data-tap="source" data-value="TV" data-entity="${esc(m.player)}">
         <div class="ic"><ha-icon icon="mdi:surround-sound"></ha-icon></div>
-        <div class="tx"><span class="nm">Son de la TV</span><span class="stt">${p.attributes.source === "TV" ? "Actif" : "Basculer"}</span></div></div>`);
+        <div class="tx"><span class="nm">${tr("Son de la TV")}</span><span class="stt">${p.attributes.source === "TV" ? tr("Actif") : tr("Basculer")}</span></div></div>`);
     }
     if (tvTiles.length) html += `<div class="tvrow">${tvTiles.join("")}</div>`;
     const tv = h.states[m.tv];
     if (tv && ctx.tvOn && (tv.attributes.source_list || []).length) {
-      html += `<div class="subh">Sources TV</div><div class="hscroll">${tv.attributes.source_list.map((src) =>
+      html += `<div class="subh">${tr("Sources TV")}</div><div class="hscroll">${tv.attributes.source_list.map((src) =>
         `<button class="chip ${src === tv.attributes.source ? "on" : ""}" style="--chip-color:var(--lrc-media)" data-g data-tap="source" data-value="${esc(src)}" data-entity="${esc(m.tv)}"><ha-icon icon="mdi:import"></ha-icon>${esc(src)}</button>`).join("")}</div>`;
     }
-    return html || `<div class="empty">Aucun lecteur configuré.</div>`;
+    return html || `<div class="empty">${tr("Aucun lecteur configuré.")}</div>`;
   }
 
   /* ---------- Appareils ---------- */
@@ -1324,8 +1592,8 @@ class LivingroomCard extends HTMLElement {
       const icon = dv.icon || (s && s.attributes.icon) || (DOMAIN_ICONS[d] || ["mdi:power"])[on ? 1 : 0];
       const img = on ? dv.image_on || dv.image : dv.image;
       const pw = dv.power && h.states[dv.power] ? ` · ${fmtNum(h.states[dv.power].state, 0)} ${esc(h.states[dv.power].attributes.unit_of_measurement || "W")}` : "";
-      const stt = unav ? "Indisponible" : (on ? "Allumé" : "Éteint") + pw;
-      const confirm = dv.confirm_off && on ? `data-confirm="Toucher encore pour éteindre"` : "";
+      const stt = unav ? tr("Indisponible") : (on ? tr("Allumé") : tr("Éteint")) + pw;
+      const confirm = dv.confirm_off && on ? `data-confirm="${tr("Toucher encore pour éteindre")}"` : "";
       const tap = d === "button" || d === "input_button" ? "activate" : unav ? "more-info" : "toggle";
       return `<div class="tile big ${on ? "on" : ""} ${unav ? "unavail" : ""}" style="--tile-color:${esc(dv.color || "var(--lrc-device)")}"
           data-g data-tap="${tap}" ${B.hold === "more-info" ? `data-hold="more-info"` : ""} ${confirm} data-key="dv-${esc(dv.entity)}" data-entity="${esc(dv.entity)}">
@@ -1359,7 +1627,7 @@ class LivingroomCard extends HTMLElement {
     const delta = last[1] - ref[1];
     if (delta > 0.2) return `<ha-icon icon="mdi:trending-up" title="+${fmtNum(delta)} en 1 h"></ha-icon>`;
     if (delta < -0.2) return `<ha-icon icon="mdi:trending-down" title="${fmtNum(delta)} en 1 h"></ha-icon>`;
-    return `<ha-icon icon="mdi:trending-neutral" title="Stable"></ha-icon>`;
+    return `<ha-icon icon="mdi:trending-neutral" title="${tr("Stable")}"></ha-icon>`;
   }
 
   _renderClimate() {
@@ -1372,9 +1640,9 @@ class LivingroomCard extends HTMLElement {
       const v = parseFloat(t.state);
       const min = Number(c.comfort_min);
       const max = Number(c.comfort_max);
-      const [tag, color] = isNaN(v) ? ["—", "var(--lrc-muted)"] : v < min ? ["Frais", "#4fa3ff"] : v > max ? ["Chaud", "#ff7043"] : ["Confortable", "#3ecf8e"];
+      const [tag, color] = isNaN(v) ? ["—", "var(--lrc-muted)"] : v < min ? [tr("Frais"), "#4fa3ff"] : v > max ? [tr("Chaud"), "#ff7043"] : [tr("Confortable"), "#3ecf8e"];
       boxes.push(`<div class="cbox" data-g data-tap="more-info" data-entity="${esc(c.temperature)}">
-        <div class="lbl"><ha-icon icon="mdi:thermometer"></ha-icon>Température ${this._trend(hist[c.temperature])}</div>
+        <div class="lbl"><ha-icon icon="mdi:thermometer"></ha-icon>${tr("Température")} ${this._trend(hist[c.temperature])}</div>
         <div class="big">${fmtNum(t.state)}<small>${esc(t.attributes.unit_of_measurement || "°C")}</small></div>
         <span class="tag" style="--tag-color:${color}">${tag}</span>
         ${c.graph ? this._spark(hist[c.temperature], "var(--lrc-climate)") : ""}</div>`);
@@ -1382,9 +1650,9 @@ class LivingroomCard extends HTMLElement {
     const hu = h.states[c.humidity];
     if (hu) {
       const v = parseFloat(hu.state);
-      const [tag, color] = isNaN(v) ? ["—", "var(--lrc-muted)"] : v < 40 ? ["Sec", "#ffb74d"] : v > 60 ? ["Humide", "#4fa3ff"] : ["Idéal", "#3ecf8e"];
+      const [tag, color] = isNaN(v) ? ["—", "var(--lrc-muted)"] : v < 40 ? [tr("Sec"), "#ffb74d"] : v > 60 ? [tr("Humide"), "#4fa3ff"] : [tr("Idéal"), "#3ecf8e"];
       boxes.push(`<div class="cbox" data-g data-tap="more-info" data-entity="${esc(c.humidity)}">
-        <div class="lbl"><ha-icon icon="mdi:water-percent"></ha-icon>Humidité ${this._trend(hist[c.humidity])}</div>
+        <div class="lbl"><ha-icon icon="mdi:water-percent"></ha-icon>${tr("Humidité")} ${this._trend(hist[c.humidity])}</div>
         <div class="big">${fmtNum(hu.state, 0)}<small>%</small></div>
         <span class="tag" style="--tag-color:${color}">${tag}</span>
         ${c.graph ? this._spark(hist[c.humidity], "#4fa3ff", 0, 100) : ""}</div>`);
@@ -1392,17 +1660,17 @@ class LivingroomCard extends HTMLElement {
     const w = h.states[this._cfg.header.weather];
     if (w) {
       boxes.push(`<div class="cbox wide" data-g data-tap="more-info" data-entity="${esc(this._cfg.header.weather)}" style="cursor:pointer">
-        <div><div class="lbl"><ha-icon icon="mdi:home-export-outline"></ha-icon>Extérieur</div>
+        <div><div class="lbl"><ha-icon icon="mdi:home-export-outline"></ha-icon>${tr("Extérieur")}</div>
         <div class="big" style="font-size:1.5rem">${fmtNum(w.attributes.temperature)}<small>°</small></div></div>
         <ha-icon icon="${WEATHER_ICONS[w.state] || "mdi:weather-partly-cloudy"}" style="--mdc-icon-size:44px;color:var(--lrc-climate)"></ha-icon>
-        ${t && !isNaN(parseFloat(t.state)) && w.attributes.temperature !== undefined ? `<div class="lbl">Écart ${fmtNum(parseFloat(t.state) - w.attributes.temperature)}°</div>` : ""}</div>`);
+        ${t && !isNaN(parseFloat(t.state)) && w.attributes.temperature !== undefined ? `<div class="lbl">${tr("Écart")} ${fmtNum(parseFloat(t.state) - w.attributes.temperature)}°</div>` : ""}</div>`);
     }
     const cl = h.states[c.climate];
     if (cl) {
       const target = cl.attributes.temperature;
       const step = cl.attributes.target_temp_step || 0.5;
       boxes.push(`<div class="cbox wide">
-        <div><div class="lbl"><ha-icon icon="mdi:thermostat"></ha-icon>${esc(cl.attributes.friendly_name || "Chauffage")}</div>
+        <div><div class="lbl"><ha-icon icon="mdi:thermostat"></ha-icon>${esc(cl.attributes.friendly_name || tr("Chauffage"))}</div>
         <div class="btns" style="margin-top:6px">${(cl.attributes.hvac_modes || []).map((md) =>
           `<button class="btn sm ${cl.state === md ? "active" : ""}" style="--btn-color:var(--lrc-climate)" data-g data-tap="hvac" data-value="${esc(md)}" data-entity="${esc(c.climate)}" title="${esc(md)}"><ha-icon icon="${{ off: "mdi:power", heat: "mdi:fire", cool: "mdi:snowflake", auto: "mdi:thermostat-auto", heat_cool: "mdi:sun-snowflake-variant", dry: "mdi:water-off", fan_only: "mdi:fan" }[md] || "mdi:thermostat"}"></ha-icon></button>`).join("")}</div></div>
         ${target !== undefined && target !== null ? `<div class="thermo">
@@ -1411,7 +1679,7 @@ class LivingroomCard extends HTMLElement {
           <button class="btn" data-g data-tap="temp-step" data-value="${step}" data-entity="${esc(c.climate)}"><ha-icon icon="mdi:plus"></ha-icon></button></div>` : ""}
       </div>`);
     }
-    return this._sectionHeader("climate") + (boxes.length ? `<div class="climate">${boxes.join("")}</div>` : `<div class="empty">Aucun capteur configuré.</div>`);
+    return this._sectionHeader("climate") + (boxes.length ? `<div class="climate">${boxes.join("")}</div>` : `<div class="empty">${tr("Aucun capteur configuré.")}</div>`);
   }
 
   async _fetchHistory() {
@@ -1549,7 +1817,7 @@ class LivingroomCard extends HTMLElement {
       if (kind === "seek") {
         const p = this.shadowRoot.querySelector("[data-pos]");
         if (p) p.textContent = formatTime((v / 100) * (Number(el.dataset.dur) || 0));
-      } else lbl.textContent = kind === "position" ? (v >= 100 ? "Ouvert" : v <= 0 ? "Fermé" : `${v} %`) : `${v} %`;
+      } else lbl.textContent = kind === "position" ? (v >= 100 ? tr("Ouvert") : v <= 0 ? tr("Fermé") : `${v} %`) : `${v} %`;
     }
     return v;
   }
@@ -1699,7 +1967,7 @@ class LivingroomCard extends HTMLElement {
       const pw = this._hass.states[m.tv_power];
       if (pw && pw.state !== "on") this._call(domainOf(m.tv_power), "turn_on", { entity_id: m.tv_power });
       if (tv && tv.state !== "unavailable") this._call("media_player", "turn_on", { entity_id: m.tv });
-      else if (!m.tv_power) this._toast("TV injoignable");
+      else if (!m.tv_power) this._toast(tr("TV injoignable"));
     }
   }
 
@@ -1716,7 +1984,7 @@ class LivingroomCard extends HTMLElement {
       if (cfg.media.ambilight && on(cfg.media.ambilight)) this._call("light", "turn_off", { entity_id: cfg.media.ambilight });
     }
     if (o.covers && cfg.covers.length) this._call("cover", "close_cover", { entity_id: cfg.covers.map((c) => c.entity) });
-    this._toast("Tout est éteint");
+    this._toast(tr("Tout est éteint"));
   }
 }
 
@@ -1725,16 +1993,16 @@ class LivingroomCard extends HTMLElement {
 /* ------------------------------------------------------------------ */
 
 const EDITOR_TABS = [
-  { id: "general", icon: "mdi:cog", label: "Général" },
-  { id: "images", icon: "mdi:image-multiple", label: "Ambiance" },
-  { id: "hotspots", icon: "mdi:gesture-tap", label: "Points" },
-  { id: "lights", icon: "mdi:lightbulb-group", label: "Lumières" },
-  { id: "covers", icon: "mdi:window-shutter", label: "Volets" },
-  { id: "media", icon: "mdi:music", label: "Média" },
-  { id: "devices", icon: "mdi:power-socket-eu", label: "Appareils" },
-  { id: "scenes", icon: "mdi:palette", label: "Scènes" },
-  { id: "climate", icon: "mdi:thermometer", label: "Climat" },
-  { id: "behavior", icon: "mdi:tune-variant", label: "Comportement" },
+  { id: "general", icon: "mdi:cog", get label() { return tr("Général"); } },
+  { id: "images", icon: "mdi:image-multiple", get label() { return tr("Ambiance"); } },
+  { id: "hotspots", icon: "mdi:gesture-tap", get label() { return tr("Points"); } },
+  { id: "lights", icon: "mdi:lightbulb-group", get label() { return tr("Lumières"); } },
+  { id: "covers", icon: "mdi:window-shutter", get label() { return tr("Volets"); } },
+  { id: "media", icon: "mdi:music", get label() { return tr("Média"); } },
+  { id: "devices", icon: "mdi:power-socket-eu", get label() { return tr("Appareils"); } },
+  { id: "scenes", icon: "mdi:palette", get label() { return tr("Scènes"); } },
+  { id: "climate", icon: "mdi:thermometer", get label() { return tr("Climat"); } },
+  { id: "behavior", icon: "mdi:tune-variant", get label() { return tr("Comportement"); } },
 ];
 
 const LABELS = {
@@ -1822,6 +2090,7 @@ class LivingroomCardEditor extends HTMLElement {
 
   set hass(hass) {
     const first = !this._hass;
+    setLang(hass);
     this._hass = hass;
     this._forms.forEach((f) => { f.hass = hass; });
     if (first) {
@@ -1874,8 +2143,8 @@ class LivingroomCardEditor extends HTMLElement {
     f.hass = this._hass;
     f.data = data;
     f.schema = schema;
-    f.computeLabel = (s) => s.label || LABELS[s.name] || s.name;
-    f.computeHelper = (s) => s.helper || HELPERS[s.name] || "";
+    f.computeLabel = (s) => s.label || (LABELS[s.name] ? tr(LABELS[s.name]) : s.name);
+    f.computeHelper = (s) => s.helper || (HELPERS[s.name] ? tr(HELPERS[s.name]) : "");
     f.addEventListener("value-changed", (ev) => {
       ev.stopPropagation();
       onChange(ev.detail.value, f);
@@ -1926,22 +2195,22 @@ class LivingroomCardEditor extends HTMLElement {
   /* ---------- Onglet Général ---------- */
 
   _tabGeneral(body) {
-    const b = this._box("Identité", "mdi:sofa");
+    const b = this._box(tr("Identité"), "mdi:sofa");
     b.appendChild(this._form([
       { name: "name", selector: { text: {} } },
       { name: "icon", selector: { icon: {} } },
     ], { name: this._config.name ?? DEFAULT_CONFIG.name, icon: this._config.icon ?? DEFAULT_CONFIG.icon }, (v) => this._commit((c) => { c.name = v.name; c.icon = v.icon; })));
     body.appendChild(b);
 
-    const a = this._box("Pièce", "mdi:floor-plan",
-      "Choisissez la pièce : la carte détecte automatiquement ses entités. Utilisez « Importer » pour figer la liste détectée et la personnaliser ensuite onglet par onglet.");
+    const a = this._box(tr("Pièce"), "mdi:floor-plan",
+      tr("Choisissez la pièce : la carte détecte automatiquement ses entités. Utilisez « Importer » pour figer la liste détectée et la personnaliser ensuite onglet par onglet."));
     a.appendChild(this._form([{ name: "area", selector: { area: {} } }], { area: this._config.area || "" }, (v) => this._commit((c) => { c.area = v.area; }, true)));
     const row = this._el("div", { class: "row", style: "margin-top:10px" });
-    row.appendChild(this._el("button", { class: "act fill", onclick: () => this._importArea() }, `<ha-icon icon="mdi:auto-fix"></ha-icon>Importer les entités de la pièce`));
+    row.appendChild(this._el("button", { class: "act fill", onclick: () => this._importArea() }, `<ha-icon icon="mdi:auto-fix"></ha-icon>${tr("Importer les entités de la pièce")}`));
     a.appendChild(row);
     body.appendChild(a);
 
-    const h = this._box("En-tête", "mdi:page-layout-header");
+    const h = this._box(tr("En-tête"), "mdi:page-layout-header");
     const header = this._section("header");
     h.appendChild(this._form([
       { name: "weather", selector: { entity: { domain: "weather" } } },
@@ -1953,10 +2222,10 @@ class LivingroomCardEditor extends HTMLElement {
 
   _importArea() {
     const area = this._config.area;
-    if (!area) return alert("Choisissez d'abord une pièce.");
+    if (!area) return alert(tr("Choisissez d'abord une pièce."));
     const d = discoverArea(this._hass, area);
     const has = ["lights", "covers", "devices", "scenes"].some((k) => (this._config[k] || []).length);
-    if (has && !confirm("Remplacer les listes actuelles (lumières, volets, appareils, scènes) par celles détectées ?")) return;
+    if (has && !confirm(tr("Remplacer les listes actuelles (lumières, volets, appareils, scènes) par celles détectées ?"))) return;
     this._commit((c) => {
       c.lights = d.lights; c.covers = d.covers; c.devices = d.devices; c.scenes = d.scenes;
       c.media = { ...(c.media || {}), ...d.media };
@@ -1971,7 +2240,7 @@ class LivingroomCardEditor extends HTMLElement {
     const box = this._box(opts.title, opts.icon, opts.help);
     items.forEach((it, i) => box.appendChild(this._listItem(key, items, it, i, opts)));
     const add = this._el("div", { style: "margin-top:8px" });
-    add.appendChild(this._form([{ name: "entity", label: opts.addLabel || "Ajouter une entité", selector: { entity: opts.filter ? { filter: opts.filter } : {} } }], { entity: "" }, (v) => {
+    add.appendChild(this._form([{ name: "entity", label: opts.addLabel || tr("Ajouter une entité"), selector: { entity: opts.filter ? { filter: opts.filter } : {} } }], { entity: "" }, (v) => {
       if (!v.entity) return;
       this._open[key] = items.length;
       this._commit((c) => { c[key] = [...(c[key] || []).map(normItem), { ...(opts.defaults || {}), entity: v.entity }]; }, true);
@@ -1983,7 +2252,7 @@ class LivingroomCardEditor extends HTMLElement {
 
   _listItem(key, items, it, i, opts) {
     const s = this._hass && this._hass.states[it.entity];
-    const name = it.name || (s ? s.attributes.friendly_name : it.entity) || "(sans entité)";
+    const name = it.name || (s ? s.attributes.friendly_name : it.entity) || tr("(sans entité)");
     const open = this._open[key] === i;
     const wrap = this._el("div", { class: "item" });
     const head = this._el("div", { class: "item-h" }, `
@@ -1993,10 +2262,10 @@ class LivingroomCardEditor extends HTMLElement {
       const btn = this._el("button", { class: `ib ${cls}`, title, onclick: (e) => { e.stopPropagation(); fn(); } }, `<ha-icon icon="${icon}"></ha-icon>`);
       head.appendChild(btn);
     };
-    if (i > 0) mk("mdi:arrow-up", "Monter", () => this._move(key, i, -1));
-    if (i < items.length - 1) mk("mdi:arrow-down", "Descendre", () => this._move(key, i, 1));
-    mk("mdi:delete-outline", "Supprimer", () => this._commit((c) => { c[key] = items.filter((_, j) => j !== i); this._open[key] = -1; }, true), "del");
-    mk(open ? "mdi:chevron-up" : "mdi:chevron-down", "Détails", () => { this._open[key] = open ? -1 : i; this._render(); });
+    if (i > 0) mk("mdi:arrow-up", tr("Monter"), () => this._move(key, i, -1));
+    if (i < items.length - 1) mk("mdi:arrow-down", tr("Descendre"), () => this._move(key, i, 1));
+    mk("mdi:delete-outline", tr("Supprimer"), () => this._commit((c) => { c[key] = items.filter((_, j) => j !== i); this._open[key] = -1; }, true), "del");
+    mk(open ? "mdi:chevron-up" : "mdi:chevron-down", tr("Détails"), () => { this._open[key] = open ? -1 : i; this._render(); });
     head.addEventListener("click", () => { this._open[key] = open ? -1 : i; this._render(); });
     wrap.appendChild(head);
     if (open) {
@@ -2026,8 +2295,8 @@ class LivingroomCardEditor extends HTMLElement {
 
   _tabLights(body) {
     this._list(body, "lights", {
-      title: "Lumières", icon: "mdi:lightbulb-group", filter: [{ domain: ["light", "switch", "input_boolean"] }],
-      help: "Les lampes variables se règlent en glissant sur la tuile. Vous pouvez remplacer l'icône par une image (allumée / éteinte).",
+      title: tr("Lumières"), icon: "mdi:lightbulb-group", filter: [{ domain: ["light", "switch", "input_boolean"] }],
+      help: tr("Les lampes variables se règlent en glissant sur la tuile. Vous pouvez remplacer l'icône par une image (allumée / éteinte)."),
       schema: () => [
         { name: "entity", selector: { entity: { filter: [{ domain: ["light", "switch", "input_boolean"] }] } } },
         { name: "name", selector: { text: {} } },
@@ -2041,8 +2310,8 @@ class LivingroomCardEditor extends HTMLElement {
 
   _tabCovers(body) {
     this._list(body, "covers", {
-      title: "Volets", icon: "mdi:window-shutter", filter: [{ domain: "cover" }],
-      help: "Glissez verticalement dans la fenêtre dessinée pour régler la position. Le bouton « My » (Somfy) est détecté automatiquement à l'import.",
+      title: tr("Volets"), icon: "mdi:window-shutter", filter: [{ domain: "cover" }],
+      help: tr("Glissez verticalement dans la fenêtre dessinée pour régler la position. Le bouton « My » (Somfy) est détecté automatiquement à l'import."),
       schema: () => [
         { name: "entity", selector: { entity: { domain: "cover" } } },
         { name: "name", selector: { text: {} } },
@@ -2054,8 +2323,8 @@ class LivingroomCardEditor extends HTMLElement {
   _tabDevices(body) {
     const flt = [{ domain: ["switch", "input_boolean", "fan", "button", "input_button", "light", "humidifier", "vacuum"] }];
     this._list(body, "devices", {
-      title: "Appareils & prises", icon: "mdi:power-socket-eu", filter: flt,
-      help: "Consoles, TV, multiprise… Activez la confirmation pour éviter de couper une console par erreur.",
+      title: tr("Appareils & prises"), icon: "mdi:power-socket-eu", filter: flt,
+      help: tr("Consoles, TV, multiprise… Activez la confirmation pour éviter de couper une console par erreur."),
       schema: () => [
         { name: "entity", selector: { entity: { filter: flt } } },
         { name: "name", selector: { text: {} } },
@@ -2072,8 +2341,8 @@ class LivingroomCardEditor extends HTMLElement {
   _tabScenes(body) {
     const flt = [{ domain: ["scene", "script", "automation", "button", "input_button"] }];
     this._list(body, "scenes", {
-      title: "Scènes & raccourcis", icon: "mdi:palette", filter: flt,
-      help: "Affichées en barre défilante sous l'image. Appui long = détails de l'entité.",
+      title: tr("Scènes & raccourcis"), icon: "mdi:palette", filter: flt,
+      help: tr("Affichées en barre défilante sous l'image. Appui long = détails de l'entité."),
       schema: () => [
         { name: "entity", selector: { entity: { filter: flt } } },
         { name: "name", selector: { text: {} } },
@@ -2088,8 +2357,8 @@ class LivingroomCardEditor extends HTMLElement {
     const cfg = this._cfg;
     const items = (this._config.hotspots || []).map(normItem);
     const sel = this._open.hotspots ?? -1;
-    const box = this._box("Placement sur l'image", "mdi:crosshairs-gps",
-      sel >= 0 ? "Cliquez sur l'image pour placer le point sélectionné." : "Ouvrez un point ci-dessous puis cliquez sur l'image pour le positionner.");
+    const box = this._box(tr("Placement sur l'image"), "mdi:crosshairs-gps",
+      sel >= 0 ? tr("Cliquez sur l'image pour placer le point sélectionné.") : tr("Ouvrez un point ci-dessous puis cliquez sur l'image pour le positionner."));
     const placer = this._el("div", { class: "placer", style: `aspect-ratio:${cfg.layout.aspect_ratio || "3/2"}` });
     const scene = this._hass ? computeScene(this._hass, cfg) : { image: cfg.images.default };
     if (scene.image) placer.appendChild(this._el("img", { src: scene.image, alt: "" }));
@@ -2105,15 +2374,15 @@ class LivingroomCardEditor extends HTMLElement {
     box.appendChild(placer);
     body.appendChild(box);
     this._list(body, "hotspots", {
-      title: "Points interactifs", icon: "mdi:gesture-tap",
-      help: "Des pastilles posées sur l'image (lampe, TV, fenêtre…) : toucher = action, appui long = détails. Elles s'illuminent quand l'entité est active.",
+      title: tr("Points interactifs"), icon: "mdi:gesture-tap",
+      help: tr("Des pastilles posées sur l'image (lampe, TV, fenêtre…) : toucher = action, appui long = détails. Elles s'illuminent quand l'entité est active."),
       defaults: { x: 50, y: 50 },
       schema: () => [
         { name: "entity", selector: { entity: {} } },
         { name: "name", selector: { text: {} } },
         { name: "icon", selector: { icon: {} } },
         { name: "show_name", selector: { boolean: {} } },
-        { name: "tap_action", selector: { select: { mode: "dropdown", options: [{ value: "toggle", label: "Basculer" }, { value: "more-info", label: "Détails (more-info)" }, { value: "activate", label: "Activer (scène / script / bouton)" }] } } },
+        { name: "tap_action", selector: { select: { mode: "dropdown", options: [{ value: "toggle", label: tr("Basculer") }, { value: "more-info", label: tr("Détails (more-info)") }, { value: "activate", label: tr("Activer (scène / script / bouton)") }] } } },
         { name: "x", selector: { number: { min: 0, max: 100, step: 0.5, mode: "slider" } } },
         { name: "y", selector: { number: { min: 0, max: 100, step: 0.5, mode: "slider" } } },
         { name: "color", selector: { text: {} } },
@@ -2128,11 +2397,11 @@ class LivingroomCardEditor extends HTMLElement {
     const status = this._el("div", { class: "status", id: "status" });
     body.appendChild(status);
 
-    const g = this._box("Image de base", "mdi:image", "Sans image, une illustration animée du salon est générée automatiquement à partir de l'état des entités (ciel, volets, lampes, TV, musique).");
+    const g = this._box(tr("Image de base"), "mdi:image", tr("Sans image, une illustration animée du salon est générée automatiquement à partir de l'état des entités (ciel, volets, lampes, TV, musique)."));
     g.appendChild(this._form([
       { name: "default", selector: { text: {} } },
       { name: "transition", selector: { number: { min: 0, max: 3000, step: 100, mode: "slider", unit_of_measurement: "ms" } } },
-      { name: "position", selector: { select: { mode: "dropdown", options: ["center", "top", "bottom", "left", "right"].map((v) => ({ value: v, label: { center: "Centré", top: "Haut", bottom: "Bas", left: "Gauche", right: "Droite" }[v] })) } } },
+      { name: "position", selector: { select: { mode: "dropdown", options: ["center", "top", "bottom", "left", "right"].map((v) => ({ value: v, label: { center: tr("Centré"), top: tr("Haut"), bottom: tr("Bas"), left: tr("Gauche"), right: tr("Droite") }[v] })) } } },
       { name: "night_dim", selector: { number: { min: 0, max: 80, step: 5, mode: "slider", unit_of_measurement: "%" } } },
     ], images, (v) => this._commit((c) => { c.images = { ...(c.images || {}), ...v }; })));
     if (images.default) g.appendChild(this._el("img", { class: "thumb", src: images.default, alt: "" }));
@@ -2140,38 +2409,38 @@ class LivingroomCardEditor extends HTMLElement {
 
     // Règles
     const rules = images.rules || [];
-    const rb = this._box("Règles d'ambiance", "mdi:image-auto-adjust",
-      "Évaluées dans l'ordre : la <b>première</b> règle dont les conditions sont remplies choisit l'image. Utilisez « Aperçu » pour tester une image sur la carte.");
+    const rb = this._box(tr("Règles d'ambiance"), "mdi:image-auto-adjust",
+      tr("Évaluées dans l'ordre : la <b>première</b> règle dont les conditions sont remplies choisit l'image. Utilisez « Aperçu » pour tester une image sur la carte."));
     rules.forEach((r, i) => rb.appendChild(this._ruleItem(rules, r, i)));
     const row = this._el("div", { class: "row", style: "margin-top:8px" });
     row.appendChild(this._el("button", { class: "act", onclick: () => {
       this._open.rules = rules.length;
-      this._commit((c) => { c.images = { ...(c.images || {}), rules: [...rules, { name: `Règle ${rules.length + 1}`, image: "", match: "all", conditions: [{ condition: "night" }] }] }; }, true);
-    } }, `<ha-icon icon="mdi:plus"></ha-icon>Ajouter une règle`));
+      this._commit((c) => { c.images = { ...(c.images || {}), rules: [...rules, { name: tr("Règle {n}", { n: rules.length + 1 }), image: "", match: "all", conditions: [{ condition: "night" }] }] }; }, true);
+    } }, `<ha-icon icon="mdi:plus"></ha-icon>${tr("Ajouter une règle")}`));
     rb.appendChild(row);
 
     const sug = this._el("div", { style: "margin-top:12px" });
     let folder = "/local/salon/";
     sug.appendChild(this._form([{ name: "folder", selector: { text: {} } }], { folder }, (v) => { folder = v.folder; }));
     sug.appendChild(this._el("button", { class: "act fill", style: "margin-top:8px", onclick: () => {
-      if (rules.length && !confirm("Remplacer les règles existantes par le jeu de règles suggéré ?")) return;
+      if (rules.length && !confirm(tr("Remplacer les règles existantes par le jeu de règles suggéré ?"))) return;
       this._commit((c) => { c.images = { ...(c.images || {}), default: (c.images && c.images.default) || folder.replace(/\/?$/, "/") + "salon_jour.jpg", rules: suggestedRules(folder) }; }, true);
-    } }, `<ha-icon icon="mdi:auto-fix"></ha-icon>Générer les règles suggérées (7 ambiances)`));
-    sug.appendChild(this._el("p", { class: "muted" }, "Correspond aux fichiers décrits dans PROMPTS.md : salon_jour, salon_nuit, salon_nuit_lumieres, salon_tv_jour, salon_tv_nuit, salon_volets_fermes, salon_musique."));
+    } }, `<ha-icon icon="mdi:auto-fix"></ha-icon>${tr("Générer les règles suggérées (7 ambiances)")}`));
+    sug.appendChild(this._el("p", { class: "muted" }, tr("Correspond aux fichiers décrits dans PROMPTS.md : salon_jour, salon_nuit, salon_nuit_lumieres, salon_tv_jour, salon_tv_nuit, salon_volets_fermes, salon_musique.")));
     rb.appendChild(sug);
     body.appendChild(rb);
 
     // Calques
-    const ob = this._box("Calques superposés", "mdi:layers-triple",
-      "Images transparentes (PNG) ou sur fond noir (fusion « screen ») qui apparaissent par-dessus l'ambiance quand une entité est active : halo d'une lampe, écran TV allumé…");
+    const ob = this._box(tr("Calques superposés"), "mdi:layers-triple",
+      tr("Images transparentes (PNG) ou sur fond noir (fusion « screen ») qui apparaissent par-dessus l'ambiance quand une entité est active : halo d'une lampe, écran TV allumé…"));
     const overlays = images.overlays || [];
     overlays.forEach((o, i) => {
       const open = this._open.overlays === i;
       const s = this._hass && this._hass.states[o.entity];
       const it = this._el("div", { class: "item" });
       const head = this._el("div", { class: "item-h", onclick: () => { this._open.overlays = open ? -1 : i; this._render(); } },
-        `<ha-icon icon="mdi:layers"></ha-icon><span class="t">${esc(s ? s.attributes.friendly_name : o.entity || "Calque")}<span class="s">${esc(o.image || "")}</span></span>`);
-      head.appendChild(this._el("button", { class: "ib del", title: "Supprimer", onclick: (e) => { e.stopPropagation(); this._commit((c) => { c.images = { ...(c.images || {}), overlays: overlays.filter((_, j) => j !== i) }; }, true); } }, `<ha-icon icon="mdi:delete-outline"></ha-icon>`));
+        `<ha-icon icon="mdi:layers"></ha-icon><span class="t">${esc(s ? s.attributes.friendly_name : o.entity || tr("Calque"))}<span class="s">${esc(o.image || "")}</span></span>`);
+      head.appendChild(this._el("button", { class: "ib del", title: tr("Supprimer"), onclick: (e) => { e.stopPropagation(); this._commit((c) => { c.images = { ...(c.images || {}), overlays: overlays.filter((_, j) => j !== i) }; }, true); } }, `<ha-icon icon="mdi:delete-outline"></ha-icon>`));
       it.appendChild(head);
       if (open) {
         const b = this._el("div", { class: "item-b" });
@@ -2189,7 +2458,7 @@ class LivingroomCardEditor extends HTMLElement {
     ob.appendChild(this._el("button", { class: "act", onclick: () => {
       this._open.overlays = overlays.length;
       this._commit((c) => { c.images = { ...(c.images || {}), overlays: [...overlays, { entity: "", image: "", blend: "screen", opacity: 1, use_brightness: true }] }; }, true);
-    } }, `<ha-icon icon="mdi:plus"></ha-icon>Ajouter un calque`));
+    } }, `<ha-icon icon="mdi:plus"></ha-icon>${tr("Ajouter un calque")}`));
     body.appendChild(ob);
     this._refreshStatus();
   }
@@ -2205,12 +2474,12 @@ class LivingroomCardEditor extends HTMLElement {
     const summary = (r.conditions || []).map((c) => (CONDITION_TYPES.find((t) => t.value === (c.condition || "entity")) || {}).label || "").join(r.match === "any" ? " OU " : " ET ");
     const head = this._el("div", { class: "item-h", onclick: () => { this._open.rules = open ? -1 : i; this._render(); } },
       `<ha-icon icon="${r.disabled ? "mdi:image-off-outline" : "mdi:image-filter-hdr"}"></ha-icon>
-       <span class="t">${i + 1}. ${esc(r.name || "Règle")}<span class="active" data-rule="${i}"></span><span class="s">${esc(summary)}</span></span>`);
+       <span class="t">${i + 1}. ${esc(r.name || tr("Règle"))}<span class="active" data-rule="${i}"></span><span class="s">${esc(summary)}</span></span>`);
     const mk = (icon, title, fn, cls = "") => head.appendChild(this._el("button", { class: `ib ${cls}`, title, onclick: (e) => { e.stopPropagation(); fn(); } }, `<ha-icon icon="${icon}"></ha-icon>`));
-    mk("mdi:eye-outline", "Aperçu sur la carte", () => fireEvent(window, "lrc-preview", { image: r.image, filter: r.filter, duration: 6000 }));
-    if (i > 0) mk("mdi:arrow-up", "Monter", () => { this._open.rules = i - 1; setRules((l) => l.splice(i - 1, 0, l.splice(i, 1)[0]), true); });
-    if (i < rules.length - 1) mk("mdi:arrow-down", "Descendre", () => { this._open.rules = i + 1; setRules((l) => l.splice(i + 1, 0, l.splice(i, 1)[0]), true); });
-    mk("mdi:delete-outline", "Supprimer", () => { this._open.rules = -1; setRules((l) => l.splice(i, 1), true); }, "del");
+    mk("mdi:eye-outline", tr("Aperçu sur la carte"), () => fireEvent(window, "lrc-preview", { image: r.image, filter: r.filter, duration: 6000 }));
+    if (i > 0) mk("mdi:arrow-up", tr("Monter"), () => { this._open.rules = i - 1; setRules((l) => l.splice(i - 1, 0, l.splice(i, 1)[0]), true); });
+    if (i < rules.length - 1) mk("mdi:arrow-down", tr("Descendre"), () => { this._open.rules = i + 1; setRules((l) => l.splice(i + 1, 0, l.splice(i, 1)[0]), true); });
+    mk("mdi:delete-outline", tr("Supprimer"), () => { this._open.rules = -1; setRules((l) => l.splice(i, 1), true); }, "del");
     wrap.appendChild(head);
     if (!open) return wrap;
 
@@ -2219,13 +2488,13 @@ class LivingroomCardEditor extends HTMLElement {
       { name: "name", selector: { text: {} } },
       { name: "image", selector: { text: {} } },
       { name: "filter", selector: { text: {} } },
-      { name: "match", selector: { select: { mode: "list", options: [{ value: "all", label: "Toutes les conditions (ET)" }, { value: "any", label: "Au moins une condition (OU)" }] } } },
-      { name: "disabled", label: "Désactiver cette règle", selector: { boolean: {} } },
+      { name: "match", selector: { select: { mode: "list", options: [{ value: "all", label: tr("Toutes les conditions (ET)") }, { value: "any", label: tr("Au moins une condition (OU)") }] } } },
+      { name: "disabled", label: tr("Désactiver cette règle"), selector: { boolean: {} } },
     ], { match: "all", ...r }, (v) => setRules((l) => { l[i] = { ...l[i], ...v, conditions: l[i].conditions }; })));
     if (r.image) b.appendChild(this._el("img", { class: "thumb", src: r.image, alt: "" }));
     (r.conditions || []).forEach((c, ci) => {
       const cw = this._el("div", { class: "cond" });
-      cw.appendChild(this._el("button", { class: "ib del", title: "Retirer la condition", onclick: () => setRules((l) => l[i].conditions.splice(ci, 1), true) }, `<ha-icon icon="mdi:close"></ha-icon>`));
+      cw.appendChild(this._el("button", { class: "ib del", title: tr("Retirer la condition"), onclick: () => setRules((l) => l[i].conditions.splice(ci, 1), true) }, `<ha-icon icon="mdi:close"></ha-icon>`));
       cw.appendChild(this._form(this._condSchema(c), { condition: "entity", operator: "is", ...c }, (v, form) => {
         const typeChanged = (v.condition || "entity") !== (c.condition || "entity");
         setRules((l) => { l[i].conditions[ci] = v; }, typeChanged);
@@ -2233,7 +2502,7 @@ class LivingroomCardEditor extends HTMLElement {
       b.appendChild(cw);
     });
     b.appendChild(this._el("button", { class: "act", onclick: () => setRules((l) => { l[i].conditions = [...(l[i].conditions || []), { condition: "entity", operator: "is", entity: "", value: "on" }]; }, true) },
-      `<ha-icon icon="mdi:plus"></ha-icon>Ajouter une condition`));
+      `<ha-icon icon="mdi:plus"></ha-icon>${tr("Ajouter une condition")}`));
     wrap.appendChild(b);
     return wrap;
   }
@@ -2247,11 +2516,11 @@ class LivingroomCardEditor extends HTMLElement {
       if (!["active", "inactive"].includes(c.operator)) s.push({ name: "value", selector: { text: {} } });
       s.push({ name: "attribute", selector: { text: {} } });
     } else if (type === "covers_closed" || type === "covers_open") {
-      s.push({ name: "value", label: "Seuil (%)", selector: { number: { min: 0, max: 100, step: 5, mode: "slider" } } });
+      s.push({ name: "value", label: tr("Seuil (%)"), selector: { number: { min: 0, max: 100, step: 5, mode: "slider" } } });
     } else if (type === "mode") {
       const ent = this._cfg.header.mode;
       const opts = ent && this._hass && this._hass.states[ent] ? this._hass.states[ent].attributes.options || [] : [];
-      s.push({ name: "value", label: "Mode", selector: opts.length ? { select: { mode: "dropdown", options: opts, custom_value: true } } : { text: {} } });
+      s.push({ name: "value", label: tr("Mode"), selector: opts.length ? { select: { mode: "dropdown", options: opts, custom_value: true } } : { text: {} } });
     }
     return s;
   }
@@ -2260,7 +2529,7 @@ class LivingroomCardEditor extends HTMLElement {
     const st = this.shadowRoot.getElementById("status");
     if (!st || !this._hass) return;
     const scene = computeScene(this._hass, this._cfg);
-    st.innerHTML = `<b>Ambiance actuelle :</b> ${esc(scene.name)}${scene.image ? ` — <code>${esc(scene.image)}</code>` : " — illustration générée"}`;
+    st.innerHTML = `<b>${tr("Ambiance actuelle :")}</b> ${esc(scene.name)}${scene.image ? ` — <code>${esc(scene.image)}</code>` : " — " + tr("illustration générée")}`;
     this.shadowRoot.querySelectorAll("[data-rule]").forEach((el) => { el.textContent = Number(el.dataset.rule) === scene.index ? "● ACTIVE" : ""; });
   }
 
@@ -2270,7 +2539,7 @@ class LivingroomCardEditor extends HTMLElement {
     const media = this._section("media");
     const p = this._hass && this._hass.states[media.player];
     const sourceList = p ? p.attributes.source_list || [] : [];
-    const b = this._box("Enceinte", "mdi:speaker");
+    const b = this._box(tr("Enceinte"), "mdi:speaker");
     b.appendChild(this._form([
       { name: "player", selector: { entity: { domain: "media_player" } } },
       { name: "show_sources", selector: { boolean: {} } },
@@ -2278,7 +2547,7 @@ class LivingroomCardEditor extends HTMLElement {
       { name: "sound_controls", selector: { entity: { domain: "switch", multiple: true } } },
     ], media, (v) => this._commit((c) => { c.media = { ...(c.media || {}), ...v }; }, (v.player || "") !== (media.player || ""))));
     body.appendChild(b);
-    const t = this._box("Télévision", "mdi:television");
+    const t = this._box(tr("Télévision"), "mdi:television");
     t.appendChild(this._form([
       { name: "tv", selector: { entity: { domain: "media_player" } } },
       { name: "tv_name", selector: { text: {} } },
@@ -2291,7 +2560,7 @@ class LivingroomCardEditor extends HTMLElement {
   /* ---------- Onglet Climat ---------- */
 
   _tabClimate(body) {
-    const b = this._box("Climat", "mdi:thermometer", "La tendance (↑ ↓) et la courbe sont calculées depuis l'historique.");
+    const b = this._box(tr("Climat"), "mdi:thermometer", tr("La tendance (↑ ↓) et la courbe sont calculées depuis l'historique."));
     b.appendChild(this._form([
       { name: "temperature", selector: { entity: { domain: "sensor", device_class: "temperature" } } },
       { name: "humidity", selector: { entity: { domain: "sensor", device_class: "humidity" } } },
@@ -2308,16 +2577,16 @@ class LivingroomCardEditor extends HTMLElement {
 
   _tabBehavior(body) {
     const layout = this._section("layout");
-    const l = this._box("Disposition", "mdi:view-dashboard-edit");
+    const l = this._box(tr("Disposition"), "mdi:view-dashboard-edit");
     l.appendChild(this._form([
-      { name: "mode", label: "Organisation", selector: { select: { mode: "list", options: [{ value: "tabs", label: "Onglets (compact)" }, { value: "stacked", label: "Tout afficher (sections empilées)" }] } } },
+      { name: "mode", label: tr("Organisation"), selector: { select: { mode: "list", options: [{ value: "tabs", label: tr("Onglets (compact)") }, { value: "stacked", label: tr("Tout afficher (sections empilées)") }] } } },
       { name: "hero", selector: { boolean: {} } },
-      { name: "hero_style", selector: { select: { mode: "list", options: [{ value: "banner", label: "Bannière" }, { value: "ambient", label: "Ambiante (l'image floutée colore toute la carte)" }] } } },
-      { name: "wide", selector: { select: { mode: "list", options: [{ value: "auto", label: "Automatique : image à gauche, commandes à droite quand la carte est assez large" }, { value: "never", label: "Toujours empilé (image au-dessus)" }] } } },
+      { name: "hero_style", selector: { select: { mode: "list", options: [{ value: "banner", label: tr("Bannière") }, { value: "ambient", label: tr("Ambiante (l'image floutée colore toute la carte)") }] } } },
+      { name: "wide", selector: { select: { mode: "list", options: [{ value: "auto", label: tr("Automatique : image à gauche, commandes à droite quand la carte est assez large") }, { value: "never", label: tr("Toujours empilé (image au-dessus)") }] } } },
       { name: "wide_breakpoint", selector: { number: { min: 400, max: 1600, step: 20, mode: "slider", unit_of_measurement: "px" } } },
       { name: "wide_split", selector: { number: { min: 30, max: 75, step: 5, mode: "slider", unit_of_measurement: "%" } } },
-      { name: "aspect_ratio", selector: { select: { mode: "dropdown", custom_value: true, options: [{ value: "3/2", label: "3:2 (images ChatGPT 1536×1024)" }, { value: "16/9", label: "16:9" }, { value: "2/1", label: "2:1 (panoramique)" }, { value: "4/3", label: "4:3" }, { value: "1/1", label: "1:1" }] } } },
-      { name: "default_tab", selector: { select: { mode: "dropdown", options: [{ value: "auto", label: "Automatique" }, ...TABS.map((t) => ({ value: t.id, label: t.label }))] } } },
+      { name: "aspect_ratio", selector: { select: { mode: "dropdown", custom_value: true, options: [{ value: "3/2", label: tr("3:2 (images ChatGPT 1536×1024)") }, { value: "16/9", label: "16:9" }, { value: "2/1", label: tr("2:1 (panoramique)") }, { value: "4/3", label: "4:3" }, { value: "1/1", label: "1:1" }] } } },
+      { name: "default_tab", selector: { select: { mode: "dropdown", options: [{ value: "auto", label: tr("Automatique") }, ...TABS.map((t) => ({ value: t.id, label: t.label }))] } } },
       { name: "remember_tab", selector: { boolean: {} } },
       { name: "auto_media_tab", selector: { boolean: {} } },
       { name: "show_summary", selector: { boolean: {} } },
@@ -2329,16 +2598,16 @@ class LivingroomCardEditor extends HTMLElement {
     body.appendChild(l);
 
     const behavior = this._section("behavior");
-    const bb = this._box("Interactions", "mdi:gesture-tap-hold");
+    const bb = this._box(tr("Interactions"), "mdi:gesture-tap-hold");
     bb.appendChild(this._form([
-      { name: "light_tap", selector: { select: { mode: "dropdown", options: [{ value: "toggle", label: "Allumer / éteindre" }, { value: "more-info", label: "Ouvrir les détails" }] } } },
-      { name: "hold", selector: { select: { mode: "dropdown", options: [{ value: "more-info", label: "Ouvrir les détails" }, { value: "none", label: "Rien" }] } } },
+      { name: "light_tap", selector: { select: { mode: "dropdown", options: [{ value: "toggle", label: tr("Allumer / éteindre") }, { value: "more-info", label: tr("Ouvrir les détails") }] } } },
+      { name: "hold", selector: { select: { mode: "dropdown", options: [{ value: "more-info", label: tr("Ouvrir les détails") }, { value: "none", label: tr("Rien") }] } } },
       { name: "haptics", selector: { boolean: {} } },
       { name: "confirm_all_off", selector: { boolean: {} } },
     ], behavior, (v) => this._commit((c) => { c.behavior = { ...(c.behavior || {}), ...v, all_off: behavior.all_off }; })));
     body.appendChild(bb);
 
-    const ab = this._box("« Tout éteindre » agit sur…", "mdi:power");
+    const ab = this._box(tr("« Tout éteindre » agit sur…"), "mdi:power");
     ab.appendChild(this._form([
       { name: "lights", selector: { boolean: {} } },
       { name: "devices", selector: { boolean: {} } },
@@ -2356,8 +2625,8 @@ window.customCards = window.customCards || [];
 if (!window.customCards.some((c) => c.type === CARD_TAG)) {
   window.customCards.push({
     type: CARD_TAG,
-    name: "Salon — carte tout-en-un",
-    description: "Ambiance visuelle dynamique, points interactifs, lumières, volets, média, appareils, scènes et climat dans une seule carte.",
+    name: tr("Salon — carte tout-en-un"),
+    description: tr("Ambiance visuelle dynamique, points interactifs, lumières, volets, média, appareils, scènes et climat dans une seule carte."),
     preview: true,
     documentationURL: "https://github.com/Ergorock/livingroom_card",
   });
